@@ -6,7 +6,7 @@ import { HeaderButton } from '@/components/header/HeaderButton'
 
 import { routes } from '@/routes/routes'
 
-type HeaderPropsType = StackHeaderProps
+export type HeaderPropsType = StackHeaderProps
 
 export const Header: FC<HeaderPropsType> = ({ navigation }): ReactElement => {
   const buttonOnClickFunc = function (e: GestureResponderEvent, routeName: string) {

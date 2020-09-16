@@ -34,7 +34,9 @@ describe('Header Button test case', () => {
     const btnProps = component.find(TouchableOpacity).props() as any
 
     btnProps.onPress({})
+    btnProps.onPress({})
+    btnProps.onPress({})
 
-    expect(onClickHandlerMock).toHaveBeenCalledTimes(1)
+    expect(onClickHandlerMock).toHaveBeenCalledTimes(3)
   })
 })

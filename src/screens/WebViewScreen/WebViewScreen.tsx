@@ -1,5 +1,4 @@
 import React, { ReactElement, Component } from 'react'
-import { View, Text } from 'react-native'
 import { WebView } from 'react-native-webview'
 
 type WebViewScreenPropType = {

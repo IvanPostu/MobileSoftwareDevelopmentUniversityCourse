@@ -49,7 +49,7 @@ export class PushNotificationScreen extends Component<
   }
 
   componentDidMount(): void {
-    this.animationPeriodicID = setInterval(
+    this.animationPeriodicID = window.setInterval(
       this.periodicCallbackForAnimation,
       1000 * UPDATE_INTERVAL,
     )

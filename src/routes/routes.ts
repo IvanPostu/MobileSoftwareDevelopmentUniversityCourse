@@ -5,7 +5,7 @@ import { PushNotificationScreen } from '@/screens/PushNotificationScreen'
 import { WebViewScreen } from '@/screens/WebViewScreen'
 import { CameraScreen } from '@/screens/CameraScreen'
 
-type CustomRouteType = {
+export type CustomRouteType = {
   [prop: string]: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     component: ComponentClass<any, any> | FunctionComponent<any>

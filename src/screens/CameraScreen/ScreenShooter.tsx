@@ -1,4 +1,4 @@
-import React, { Component, ReactElement, Fragment, PropsWithChildren } from 'react'
+import React, { Component, ReactElement, Fragment } from 'react'
 import { RNCamera } from 'react-native-camera'
 import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native'
 import CheckBox from '@react-native-community/checkbox'
@@ -19,6 +19,7 @@ export default class ScreenShooter extends Component<
   ScreenShooterPropType,
   ScreenShooterStateType
 > {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private camera: any
 
   constructor(props: ScreenShooterPropType) {
@@ -62,7 +63,7 @@ export default class ScreenShooter extends Component<
             this.state.isFrontCamera ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back
           }
           flashMode={RNCamera.Constants.FlashMode.off}
-        ></RNCamera>
+        />
 
         <View style={styles.container}>
           <View style={{ flexDirection: 'row', backgroundColor: 'white', alignItems: 'center' }}>
