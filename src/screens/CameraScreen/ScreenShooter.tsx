@@ -3,7 +3,7 @@ import { RNCamera } from 'react-native-camera'
 import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native'
 import CheckBox from '@react-native-community/checkbox'
 import { logger } from 'react-native-logs'
-import RNFS from 'react-native-fs'
+import { savePhotoFile } from './savePhotoFileApi'
 
 type ScreenShooterPropType = {
   onScreenSnapCallback: (base64RawImage: string) => void
@@ -42,20 +42,8 @@ export default class ScreenShooter extends Component<
       try {
         const data = await this.camera.takePictureAsync(options)
         log['info'](`take picture worked with success!!!`)
-        log['debug'](`Image Base64 len = ${data.base64.length}`)
-        const randNum = Math.floor(Math.random() * 9999999)
-
-        const path1 = RNFS.ExternalDirectoryPath + `/aaa${randNum}z.png`
-
-
-        RNFS.writeFile(path1, data.base64, 'base64')
-          .then((success) => {
-            log['debug']('FILE WRITTEN!  ' + path1)
-          })
-          .catch((err) => {
-            log['debug'](err.message)
-          })
-
+        log['debug'](`Image Base64 string length = ${data.base64.length}`)
+        await savePhotoFile(data.base64)
         this.props.onScreenSnapCallback(data.base64)
       } catch (error) {
         log['warn'](error)
