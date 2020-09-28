@@ -1,9 +1,10 @@
 import { ComponentClass, FunctionComponent } from 'react'
 
-import { SearchScreen } from '@/screens/SearchScreen'
-import { PushNotificationScreen } from '@/screens/PushNotificationScreen'
-import { WebViewScreen } from '@/screens/WebViewScreen'
-import { CameraScreen } from '@/screens/CameraScreen'
+// import { SearchScreen } from '@/screens/SearchScreen'
+// import { PushNotificationScreen } from '@/screens/PushNotificationScreen'
+// import { WebViewScreen } from '@/screens/WebViewScreen'
+// import { CameraScreen } from '@/screens/CameraScreen'
+import { MainScreen } from '@/screens/MainScreen'
 
 export type CustomRouteType = {
   [prop: string]: {
@@ -14,21 +15,9 @@ export type CustomRouteType = {
 }
 
 export const routes: CustomRouteType = {
-  PushNotificationScreen: {
-    component: PushNotificationScreen,
+  MainScreen: {
+    component: MainScreen,
     isHeaderButton: true,
-  },
-  SearchScreen: {
-    component: SearchScreen,
-    isHeaderButton: true,
-  },
-  CameraScreen: {
-    component: CameraScreen,
-    isHeaderButton: true,
-  },
-  WebViewScreen: {
-    component: WebViewScreen,
-    isHeaderButton: false,
   },
 }
 
