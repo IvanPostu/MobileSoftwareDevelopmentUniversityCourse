@@ -28,6 +28,7 @@ describe('Test util functions for xml storage service', function () {
     }
 
     expect(obj).toEqual(resultObj)
+    console.log(obj)
 
     const newArr = objectToArray(resultObj)
 

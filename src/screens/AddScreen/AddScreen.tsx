@@ -5,7 +5,6 @@ import { bindActionCreators, Dispatch } from 'redux'
 
 import { GlobalStateType } from '@/store'
 import { addNewDateDescription, setSelectedDate } from '@/store/Calendar/actionCreators'
-import { routes } from '@/routes/routes'
 
 function mapStateToProps(state: GlobalStateType) {
   return {
@@ -50,7 +49,7 @@ class AddScreenComponent extends Component<
     if (description) {
       this.props.addNewDateDescription({ dateStr, description })
       this.props.setSelectedDate(dateStr, description)
-      this.props.navigation.navigate(routes['MainScreen'].routeName)
+      this.props.navigation.navigate('MainScree_ndff')
     } else {
       Alert.alert('Warning', 'Description can not be empty!!!')
     }
@@ -93,7 +92,7 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     marginRight: 7,
     width: '70%',
-    height: 300,
+    height: 200,
   },
 })
 

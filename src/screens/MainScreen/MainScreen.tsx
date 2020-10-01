@@ -9,16 +9,15 @@ import { FindBar } from './FindBar'
 import { DateAndDescriptionBox } from './DateAndDescriptionBox'
 
 import { GlobalStateType } from '@/store'
-import { setSelectedDate } from '@/store/Calendar/actionCreators'
+import { setSelectedDate, fetchDataFromLocalStorage } from '@/store/Calendar/actionCreators'
 import { findDescription } from './findDescriptionForDateStr'
-import { routes } from '@/routes/routes'
 import { saveJsObjectIntoXMLFile } from '@/services/xmlStorage'
 
 const log = logger.createLogger()
 log.setSeverity('debug')
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  const actionCreators = { setSelectedDate }
+  const actionCreators = { setSelectedDate, fetchDataFromLocalStorage }
   return bindActionCreators(actionCreators, dispatch)
 }
 
@@ -28,6 +27,7 @@ function mapStateToProps(state: GlobalStateType) {
     selectedDateStr: state.calendarReducer.selectedDateStr,
     selectedDateDescription: state.calendarReducer.descriptionForSelectedDate,
     dates: state.calendarReducer.dates,
+    isLoadedFirstTime: state.calendarReducer.isLoadedFirstTime,
   }
 }
 
@@ -43,6 +43,12 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
     super(props)
     const initialDateStr: string = new Date().toISOString().slice(0, 10)
     this.props.setSelectedDate(initialDateStr, findDescription(initialDateStr, this.props.dates))
+  }
+
+  componentDidMount(): void {
+    if (!this.props.isLoadedFirstTime) {
+      this.props.fetchDataFromLocalStorage()
+    }
   }
 
   render(): ReactElement {
@@ -75,7 +81,7 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
           }}
         />
         <Bar
-          onAddClick={() => this.props.navigation.navigate(routes['AddScreen'].routeName)}
+          onAddClick={() => this.props.navigation.navigate('AddScreen_dfgsg')}
           onDeleteClick={() => {}}
           onUpdateClick={() => {}}
         />

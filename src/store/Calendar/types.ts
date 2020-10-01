@@ -4,12 +4,14 @@ export enum calendarActionTypeConstants {
   REMOVE_DATE_DESCRIPTION = '@Calendar/REMOVE_DATE',
   FIND_USING_DESCRIPTION = '@Calendar/FIND_USING_DESCRIPTION',
   SET_SELECTED_DATE_STR = '@Calendar/SET_SELECTED_DATE_STR',
+  FETCH_DATA_FROM_LOCAL_STORAGE = '@Calendar/FETCH_DATA_FROM_LOCAL_STORAGE',
 }
 
 export type CalendarStateType = {
   dates: Array<DateType>
   selectedDateStr: string
   descriptionForSelectedDate: string
+  isLoadedFirstTime: boolean
 }
 
 export type DateType = {
@@ -42,9 +44,15 @@ export interface SetSelectedDateActionType {
   payload: DateType
 }
 
+export interface FetchDataFromLocalStorage {
+  type: typeof calendarActionTypeConstants.FETCH_DATA_FROM_LOCAL_STORAGE
+  payload: Array<DateType>
+}
+
 export type CalendarRootActionType =
   | UpdateDateActionType
   | AddDateActionType
   | RemoveDateActionType
   | FindDateActionType
   | SetSelectedDateActionType
+  | FetchDataFromLocalStorage

@@ -3,29 +3,18 @@ import {
   CalendarStateType,
   CalendarRootActionType,
   calendarActionTypeConstants as T,
-  DateType,
 } from './types'
-
-const fakeDates: Array<DateType> = [
-  {
-    dateStr: '2020-09-05',
-    description: 'walk',
-  },
-  {
-    dateStr: '2020-09-18',
-    description: 'eat apple',
-  },
-  {
-    dateStr: '2020-09-09',
-    description: 'Drink beer',
-  },
-]
+import { logger } from 'react-native-logs'
 
 const initialState: CalendarStateType = {
-  dates: fakeDates,
+  dates: [],
   selectedDateStr: '',
   descriptionForSelectedDate: '',
+  isLoadedFirstTime: false,
 }
+
+const log = logger.createLogger()
+log.setSeverity('debug')
 
 export const calendarReducer: Reducer<CalendarStateType, CalendarRootActionType> = (
   state: CalendarStateType = initialState,
@@ -42,6 +31,15 @@ export const calendarReducer: Reducer<CalendarStateType, CalendarRootActionType>
         ...state,
         selectedDateStr: action.payload.dateStr,
         descriptionForSelectedDate: action.payload.description,
+      }
+    case T.FETCH_DATA_FROM_LOCAL_STORAGE:
+      state.isLoadedFirstTime
+        ? log['warn']('Data has already loaded from storage!!!')
+        : log['debug']('Data loaded from storage!!!')
+      return {
+        ...state,
+        isLoadedFirstTime: true,
+        dates: [...state.dates, ...action.payload],
       }
     default:
       return state
