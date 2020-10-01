@@ -7,11 +7,10 @@ import { logger } from 'react-native-logs'
 import { Bar } from './Bar'
 import { FindBar } from './FindBar'
 import { DateAndDescriptionBox } from './DateAndDescriptionBox'
-
+import { routeNames } from '@/routes/routeNames'
 import { GlobalStateType } from '@/store'
 import { setSelectedDate, fetchDataFromLocalStorage } from '@/store/Calendar/actionCreators'
 import { findDescription } from './findDescriptionForDateStr'
-import { saveJsObjectIntoXMLFile } from '@/services/xmlStorage'
 
 const log = logger.createLogger()
 log.setSeverity('debug')
@@ -81,9 +80,12 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
           }}
         />
         <Bar
-          onAddClick={() => this.props.navigation.navigate('AddScreen_dfgsg')}
+          onAddClick={() => this.props.navigation.navigate(routeNames.AddScreen)}
           onDeleteClick={() => {}}
-          onUpdateClick={() => {}}
+          onUpdateClick={() => this.props.navigation.navigate(routeNames.UpdateScreen)}
+          addIsActive={!Boolean(this.props.selectedDateDescription)}
+          removeIsActive={Boolean(this.props.selectedDateDescription)}
+          updateIsActive={Boolean(this.props.selectedDateDescription)}
         />
         <FindBar />
         <DateAndDescriptionBox

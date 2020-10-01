@@ -2,54 +2,55 @@ import React, { Component, ReactElement, PropsWithChildren } from 'react'
 import { Alert, ScrollView, StyleSheet, Text, TextInput, View, Button } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
-import { routeNames } from '@/routes/routeNames'
+
 import { GlobalStateType } from '@/store'
-import { addNewDateDescription, setSelectedDate } from '@/store/Calendar/actionCreators'
+import { updateDateDescription, setSelectedDate } from '@/store/Calendar/actionCreators'
 
 function mapStateToProps(state: GlobalStateType) {
   return {
     selectedDateStr: state.calendarReducer.selectedDateStr,
+    descriptionForSelectedDate: state.calendarReducer.descriptionForSelectedDate,
   }
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  const actionCreators = { addNewDateDescription, setSelectedDate }
+  const actionCreators = { updateDateDescription, setSelectedDate }
   return bindActionCreators(actionCreators, dispatch)
 }
 
-type AddScreenComponentPropType = PropsWithChildren<unknown> &
+type UpdateScreenComponentPropType = PropsWithChildren<unknown> &
   ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> & {
     navigation: {
       navigate: (a: string) => void
     }
   }
-type AddScreenComponentStateType = {
+type UpdateScreenComponentStateType = {
   inputStr: string
 }
 
-class AddScreenComponent extends Component<
-  AddScreenComponentPropType,
-  AddScreenComponentStateType
+class UpdateScreenComponent extends Component<
+  UpdateScreenComponentPropType,
+  UpdateScreenComponentStateType
 > {
   // private navigator: ReturnType<typeof useNavigation>
 
-  constructor(props: AddScreenComponentPropType) {
+  constructor(props: UpdateScreenComponentPropType) {
     super(props)
     this.state = {
-      inputStr: '',
+      inputStr: this.props.descriptionForSelectedDate,
     }
 
-    this.onAddDescriptionButtonClick = this.onAddDescriptionButtonClick.bind(this)
+    this.onUpdateDescriptionButtonClick = this.onUpdateDescriptionButtonClick.bind(this)
   }
 
-  onAddDescriptionButtonClick(): void {
+  onUpdateDescriptionButtonClick(): void {
     const description: string = this.state.inputStr
     const dateStr: string = this.props.selectedDateStr
     if (description) {
-      this.props.addNewDateDescription({ dateStr, description })
+      this.props.updateDateDescription({ dateStr, description })
       this.props.setSelectedDate(dateStr, description)
-      this.props.navigation.navigate(routeNames.MainScreen)
+      this.props.navigation.navigate('MainScree_ndff')
     } else {
       Alert.alert('Warning', 'Description can not be empty!!!')
     }
@@ -59,17 +60,20 @@ class AddScreenComponent extends Component<
     return (
       <ScrollView style={{ backgroundColor: styles.container.backgroundColor }}>
         <View style={styles.container}>
-          <Text style={{ color: 'white' }}>Add description for: {this.props.selectedDateStr}</Text>
+          <Text style={{ color: 'white' }}>
+            Update description for: {this.props.selectedDateStr}
+          </Text>
           <TextInput
             onChangeText={(text) =>
               this.setState({
                 inputStr: text,
               })
             }
+            defaultValue={this.state.inputStr}
             multiline={true}
             style={styles.inputStyle}
           />
-          <Button onPress={this.onAddDescriptionButtonClick} title={`Add description`} />
+          <Button onPress={this.onUpdateDescriptionButtonClick} title={`Update description`} />
         </View>
       </ScrollView>
     )
@@ -96,4 +100,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export const AddScreen = connect(mapStateToProps, mapDispatchToProps)(AddScreenComponent)
+export const UpdateScreen = connect(mapStateToProps, mapDispatchToProps)(UpdateScreenComponent)

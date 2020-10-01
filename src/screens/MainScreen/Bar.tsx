@@ -5,19 +5,22 @@ type BarPropType = {
   onAddClick: () => void
   onUpdateClick: () => void
   onDeleteClick: () => void
+  addIsActive: boolean
+  removeIsActive: boolean
+  updateIsActive: boolean
 } & PropsWithChildren<unknown>
 
 export const Bar: FC<BarPropType> = (props): ReactElement => {
   return (
     <View style={styles.container}>
       <View style={styles.btn}>
-        <Button disabled={false} onPress={props.onAddClick} title="Add" />
+        <Button disabled={!props.addIsActive} onPress={props.onAddClick} title="Add" />
       </View>
       <View style={styles.btn}>
-        <Button onPress={props.onUpdateClick} title="Update" />
+        <Button disabled={!props.updateIsActive} onPress={props.onUpdateClick} title="Update" />
       </View>
       <View style={styles.btn}>
-        <Button onPress={props.onDeleteClick} title="Remove" />
+        <Button disabled={!props.removeIsActive} onPress={props.onDeleteClick} title="Remove" />
       </View>
     </View>
   )

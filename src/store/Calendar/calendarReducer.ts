@@ -41,6 +41,11 @@ export const calendarReducer: Reducer<CalendarStateType, CalendarRootActionType>
         isLoadedFirstTime: true,
         dates: [...state.dates, ...action.payload],
       }
+    case T.UPDATE_DATE_DESCRIPTION:
+      return {
+        ...state,
+        dates: [...state.dates.filter((a) => a.dateStr != action.payload.dateStr), action.payload],
+      }
     default:
       return state
   }

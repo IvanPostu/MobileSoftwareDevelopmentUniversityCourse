@@ -33,12 +33,20 @@ export function addNewDateDescription(
   }
 }
 
-export function updateDateDescription(data: DateType): UpdateDateActionType {
-  return {
+export function updateDateDescription(
+  data: DateType,
+): (dispatch: Dispatch, getState: () => GlobalStateType) => void {
+  const action = {
     payload: {
       ...data,
     },
     type: T.UPDATE_DATE_DESCRIPTION,
+  }
+
+  return (dispatch: Dispatch, getState: () => GlobalStateType) => {
+    dispatch(action)
+    const dateListWithDescriptions = getState().calendarReducer.dates
+    saveArrayOfDatesIntoXMLFile('datafile', dateListWithDescriptions)
   }
 }
 

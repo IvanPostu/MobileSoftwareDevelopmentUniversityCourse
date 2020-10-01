@@ -1,11 +1,10 @@
 import { ComponentClass, FunctionComponent } from 'react'
 
-// import { SearchScreen } from '@/screens/SearchScreen'
-// import { PushNotificationScreen } from '@/screens/PushNotificationScreen'
-// import { WebViewScreen } from '@/screens/WebViewScreen'
-// import { CameraScreen } from '@/screens/CameraScreen'
 import { MainScreen } from '@/screens/MainScreen'
 import { AddScreen } from '@/screens/AddScreen'
+import { UpdateScreen } from '@/screens/UpdateScreen'
+
+import { routeNames as T } from './routeNames'
 
 export type CustomRouteType = {
   [prop: string]: {
@@ -20,12 +19,17 @@ export const routes: CustomRouteType = {
   MainScreen: {
     component: MainScreen,
     isHeaderButton: true,
-    routeName: 'MainScree_ndff',
+    routeName: T.MainScreen,
   },
   AddScreen: {
     component: AddScreen,
     isHeaderButton: false,
-    routeName: 'AddScreen_dfgsg',
+    routeName: T.AddScreen,
+  },
+  UpdateScreen: {
+    component: UpdateScreen,
+    isHeaderButton: false,
+    routeName: T.UpdateScreen,
   },
 }
 
