@@ -25,19 +25,16 @@ exports[`Header Button test case Header renders correctly 1`] = `
   <Component
     key="View1"
     onClickHandler={[Function]}
-    routeDir="View1"
     title="View1"
   />
   <Component
     key="View2"
     onClickHandler={[Function]}
-    routeDir="View2"
     title="View2"
   />
   <Component
     key="View3"
     onClickHandler={[Function]}
-    routeDir="View3"
     title="View3"
   />
 </ScrollView>

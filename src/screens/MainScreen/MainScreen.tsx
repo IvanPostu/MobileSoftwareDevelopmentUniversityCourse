@@ -6,11 +6,13 @@ import { Calendar } from 'react-native-calendars'
 import { logger } from 'react-native-logs'
 import { Bar } from './Bar'
 import { FindBar } from './FindBar'
-import { TextBox } from './TextBox'
+import { DateAndDescriptionBox } from './DateAndDescriptionBox'
 
 import { GlobalStateType } from '@/store'
 import { setSelectedDate } from '@/store/Calendar/actionCreators'
 import { findDescription } from './findDescriptionForDateStr'
+import { routes } from '@/routes/routes'
+import { saveJsObjectIntoXMLFile } from '@/services/xmlStorage'
 
 const log = logger.createLogger()
 log.setSeverity('debug')
@@ -30,7 +32,11 @@ function mapStateToProps(state: GlobalStateType) {
 }
 
 type MainScreenComponentPropType = ReturnType<typeof mapStateToProps> &
-  ReturnType<typeof mapDispatchToProps>
+  ReturnType<typeof mapDispatchToProps> & {
+    navigation: {
+      navigate: (a: string) => void
+    }
+  }
 
 class MainScreenComponent extends Component<MainScreenComponentPropType> {
   constructor(props: MainScreenComponentPropType) {
@@ -68,9 +74,13 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
             ...manualSelectedDate,
           }}
         />
-        <Bar onAddClick={() => {}} onDeleteClick={() => {}} onUpdateClick={() => {}} />
+        <Bar
+          onAddClick={() => this.props.navigation.navigate(routes['AddScreen'].routeName)}
+          onDeleteClick={() => {}}
+          onUpdateClick={() => {}}
+        />
         <FindBar />
-        <TextBox
+        <DateAndDescriptionBox
           dateStr={this.props.selectedDateStr}
           description={this.props.selectedDateDescription}
         />

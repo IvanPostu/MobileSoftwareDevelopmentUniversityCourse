@@ -6,7 +6,10 @@ type BarPropType = {
   description?: string
 } & PropsWithChildren<unknown>
 
-export const TextBox: FC<BarPropType> = ({ dateStr = 'Loading...', description }): ReactElement => {
+export const DateAndDescriptionBox: FC<BarPropType> = ({
+  dateStr = 'Loading...',
+  description,
+}): ReactElement => {
   if (!description) description = 'No description...'
 
   return (
@@ -28,6 +31,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column',
     backgroundColor: '#eee',
+    padding: 5,
   },
   dateText: {
     fontSize: 16,

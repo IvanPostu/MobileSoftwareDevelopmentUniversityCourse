@@ -21,7 +21,7 @@ const App: FC = (): ReactElement => {
           {Object.keys(routes).map((key) => (
             <Stack.Screen
               key={key}
-              name={key}
+              name={routes[key].routeName}
               component={routes[key].component}
               options={
                 (/*{ navigation, route }*/) => ({

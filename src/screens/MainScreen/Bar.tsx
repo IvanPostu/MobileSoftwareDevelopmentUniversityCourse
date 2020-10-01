@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     backgroundColor: '#444',
+    padding: 5,
   },
   btn: {
     margin: 5,
