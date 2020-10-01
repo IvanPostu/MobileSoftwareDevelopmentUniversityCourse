@@ -9,14 +9,18 @@ import { FindBar } from './FindBar'
 import { DateAndDescriptionBox } from './DateAndDescriptionBox'
 import { routeNames } from '@/routes/routeNames'
 import { GlobalStateType } from '@/store'
-import { setSelectedDate, fetchDataFromLocalStorage } from '@/store/Calendar/actionCreators'
+import {
+  setSelectedDate,
+  fetchDataFromLocalStorage,
+  removeDateDescription,
+} from '@/store/Calendar/actionCreators'
 import { findDescription } from './findDescriptionForDateStr'
 
 const log = logger.createLogger()
 log.setSeverity('debug')
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  const actionCreators = { setSelectedDate, fetchDataFromLocalStorage }
+  const actionCreators = { setSelectedDate, fetchDataFromLocalStorage, removeDateDescription }
   return bindActionCreators(actionCreators, dispatch)
 }
 
@@ -81,7 +85,7 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
         />
         <Bar
           onAddClick={() => this.props.navigation.navigate(routeNames.AddScreen)}
-          onDeleteClick={() => {}}
+          onDeleteClick={() => this.props.removeDateDescription(this.props.selectedDateStr)}
           onUpdateClick={() => this.props.navigation.navigate(routeNames.UpdateScreen)}
           addIsActive={!Boolean(this.props.selectedDateDescription)}
           removeIsActive={Boolean(this.props.selectedDateDescription)}

@@ -46,6 +46,12 @@ export const calendarReducer: Reducer<CalendarStateType, CalendarRootActionType>
         ...state,
         dates: [...state.dates.filter((a) => a.dateStr != action.payload.dateStr), action.payload],
       }
+    case T.REMOVE_DATE_DESCRIPTION:
+      return {
+        ...state,
+        dates: [...state.dates.filter((a) => a.dateStr != action.payload)],
+        descriptionForSelectedDate: '',
+      }
     default:
       return state
   }

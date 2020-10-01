@@ -50,10 +50,18 @@ export function updateDateDescription(
   }
 }
 
-export function removeDateDescription(strDate: string): RemoveDateActionType {
-  return {
+export function removeDateDescription(
+  strDate: string,
+): (dispatch: Dispatch, getState: () => GlobalStateType) => void {
+  const action = {
     payload: strDate,
     type: T.REMOVE_DATE_DESCRIPTION,
+  }
+
+  return (dispatch: Dispatch, getState: () => GlobalStateType) => {
+    dispatch(action)
+    const dateListWithDescriptions = getState().calendarReducer.dates
+    saveArrayOfDatesIntoXMLFile('datafile', dateListWithDescriptions)
   }
 }
 
