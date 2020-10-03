@@ -53,9 +53,15 @@ export function updateDateDescription(
 
 export function removeDateDescription(
   strDate: string,
+  hours: number,
+  minutes: number,
 ): (dispatch: Dispatch, getState: () => GlobalStateType) => void {
-  const action = {
-    payload: strDate,
+  const action: RemoveDateActionType = {
+    payload: {
+      strDate,
+      hours,
+      minutes,
+    },
     type: T.REMOVE_DATE_DESCRIPTION,
   }
 

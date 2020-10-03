@@ -12,7 +12,6 @@ import {
   fetchDataFromLocalStorage,
   removeDateDescription,
 } from '@/store/Calendar/actionCreators'
-import { findDescription } from './findDescriptionForDateStr'
 import { DateType } from '@/store/Calendar/types'
 
 const log = logger.createLogger()
@@ -44,7 +43,6 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
     super(props)
     const initialDateStr: string = new Date().toISOString().slice(0, 10)
     this.props.setSelectedDate(initialDateStr)
-    this.onFindCallback = this.onFindCallback.bind(this)
   }
 
   componentDidMount(): void {
@@ -53,14 +51,8 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
     }
   }
 
-  onFindCallback(findValue: string) {
-    log['debug'](`Find value: ${findValue}`)
-    const dates: Array<DateType> = this.props.dates.filter((d) => d.description.includes(findValue))
-    this.props.navigation.navigate(routeNames.SearchResultScreen, { dates })
-  }
-
   render(): ReactElement {
-    const dates = this.props.dates.reduce((result, element) => {
+    const datesForCalendar = this.props.dates.reduce((result, element) => {
       result[element.dateStr] = { selected: true, selectedColor: '#9ee' }
       return result
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -72,6 +64,8 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
         }
       : {}
 
+    const showedDates = this.props.dates.filter((a) => a.dateStr === this.props.selectedDateStr)
+
     return (
       <ScrollView>
         <Calendar
@@ -81,7 +75,7 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
             this.props.setSelectedDate(day.dateString)
           }}
           markedDates={{
-            ...dates,
+            ...datesForCalendar,
             ...manualSelectedDate,
           }}
         />
@@ -92,7 +86,12 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
           />
         </View>
 
-        <DateTimeAndDescriptionBox arr={[]} />
+        <DateTimeAndDescriptionBox
+          arr={showedDates}
+          remove={(dateStr: string, hours: number, minutes: number) => {
+            this.props.removeDateDescription(dateStr, hours, minutes)
+          }}
+        />
       </ScrollView>
     )
   }

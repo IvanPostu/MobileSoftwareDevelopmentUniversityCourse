@@ -23,7 +23,9 @@ export const calendarReducer: Reducer<CalendarStateType, CalendarRootActionType>
     case T.ADD_NEW_DATE_DESCRIPTION:
       return {
         ...state,
-        dates: [...state.dates, action.payload],
+        dates: [...state.dates, action.payload].sort((a, b) =>
+          `${a.dateStr}-${a.hours}-${a.minutes}` > `${b.dateStr}-${b.hours}-${b.minutes}` ? 1 : -1,
+        ),
       }
     case T.SET_SELECTED_DATE_STR:
       return {
@@ -44,12 +46,21 @@ export const calendarReducer: Reducer<CalendarStateType, CalendarRootActionType>
     //     ...state,
     //     dates: [...state.dates.filter((a) => a.dateStr != action.payload.dateStr), action.payload],
     //   }
-    // case T.REMOVE_DATE_DESCRIPTION:
-    //   return {
-    //     ...state,
-    //     dates: [...state.dates.filter((a) => a.dateStr != action.payload)],
-    //     descriptionForSelectedDate: '',
-    //   }
+    case T.REMOVE_DATE_DESCRIPTION:
+      return {
+        ...state,
+        dates: [
+          ...state.dates.filter(
+            (a) =>
+              !(
+                a.dateStr === action.payload.strDate &&
+                a.hours === action.payload.hours &&
+                a.minutes === action.payload.minutes
+              ),
+          ),
+        ],
+        descriptionForSelectedDate: '',
+      }
     default:
       return state
   }

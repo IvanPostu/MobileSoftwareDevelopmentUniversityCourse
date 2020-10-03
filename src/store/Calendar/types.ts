@@ -35,7 +35,11 @@ export interface AddDateActionType {
 
 export interface RemoveDateActionType {
   type: typeof calendarActionTypeConstants.REMOVE_DATE_DESCRIPTION
-  payload: string
+  payload: {
+    strDate: string
+    hours: number
+    minutes: number
+  }
 }
 
 export interface FindDateActionType {

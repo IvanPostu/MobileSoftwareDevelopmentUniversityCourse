@@ -10,6 +10,7 @@ import { TimePicker } from '@/components/TimePicker'
 function mapStateToProps(state: GlobalStateType) {
   return {
     selectedDateStr: state.calendarReducer.selectedDateStr,
+    dates: state.calendarReducer.dates,
   }
 }
 
@@ -35,8 +36,6 @@ class AddScreenComponent extends Component<
   AddScreenComponentPropType,
   AddScreenComponentStateType
 > {
-  // private navigator: ReturnType<typeof useNavigation>
-
   constructor(props: AddScreenComponentPropType) {
     super(props)
     this.state = {
@@ -56,6 +55,16 @@ class AddScreenComponent extends Component<
   onAddDescriptionButtonClick(): void {
     const description: string = this.state.inputStr
     const dateStr: string = this.props.selectedDateStr
+
+    if (
+      this.props.dates.findIndex(
+        (a) => a.hours === this.state.hours && a.minutes === this.state.minutes,
+      ) !== -1
+    ) {
+      Alert.alert('Warning', 'Current time is reserved!!!')
+      return
+    }
+
     if (description) {
       this.props.addNewDateDescription({
         dateStr,
@@ -67,6 +76,7 @@ class AddScreenComponent extends Component<
       this.props.navigation.navigate(routeNames.MainScreen)
     } else {
       Alert.alert('Warning', 'Description can not be empty!!!')
+      return
     }
   }
 
