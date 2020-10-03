@@ -40,7 +40,7 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
     this.props.setSelectedDate(initialDateStr)
   }
 
-  componentDidMount(): void {
+  async componentDidMount(): Promise<void> {
     if (!this.props.isLoadedFirstTime) {
       // this.props.fetchDataFromLocalStorage()
     }
