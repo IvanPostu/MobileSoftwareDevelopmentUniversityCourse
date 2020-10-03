@@ -25,18 +25,18 @@ const styles = StyleSheet.create({
   headerButton: {
     flex: 0,
     backgroundColor: '#7a9ea3',
-    paddingHorizontal: 7,
-    paddingVertical: 3,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
     marginVertical: 4,
     marginHorizontal: 5,
     borderRadius: 2,
-    maxWidth: 90,
+    maxWidth: 100,
     minWidth: 70,
     justifyContent: 'center',
     alignItems: 'center',
   },
   customBtnText: {
-    fontSize: 13,
+    fontSize: 15,
     color: '#fff',
   },
 })

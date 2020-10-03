@@ -95,7 +95,11 @@ class AddScreenComponent extends Component<
             style={styles.inputStyle}
           />
 
-          <TimePicker onTimeChange={this.onTimeChange} />
+          <TimePicker
+            onTimeChange={this.onTimeChange}
+            hours={this.state.hours}
+            minutes={this.state.minutes}
+          />
 
           <Button onPress={this.onAddDescriptionButtonClick} title={`Add description`} />
         </View>

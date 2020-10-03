@@ -1,24 +1,30 @@
-import React, { FC, useState, useEffect } from 'react'
+import React, { FC, useCallback } from 'react'
 import { View, StyleSheet, Text } from 'react-native'
 import { Picker } from '@react-native-community/picker'
 import { Fragment } from 'react'
 
 type TimePickerPropType = {
   onTimeChange: (hours: number, minute: number) => void
+  hours: number
+  minutes: number
 }
 
 const hours: Array<number> = [...Array(24).keys()]
 const minutes: Array<number> = [...Array(60).keys()]
 
 export const TimePicker: FC<TimePickerPropType> = (props) => {
-  const [time, setTime] = useState<{ hours: number; minute: number }>({
-    hours: 0,
-    minute: 0,
-  })
-
-  useEffect(() => {
-    props.onTimeChange(time.hours, time.minute)
-  }, [time])
+  const setHours = useCallback(
+    (hours: number) => {
+      props.onTimeChange(hours, props.minutes)
+    },
+    [props.minutes, props.hours],
+  )
+  const setMinutes = useCallback(
+    (minutes: number) => {
+      props.onTimeChange(props.hours, minutes)
+    },
+    [props.minutes, props.hours],
+  )
 
   return (
     <Fragment>
@@ -27,9 +33,9 @@ export const TimePicker: FC<TimePickerPropType> = (props) => {
         <View style={styles.timePicker}>
           <Text style={{ color: 'black', textAlign: 'center' }}>Hours:</Text>
           <Picker
-            selectedValue={time.hours}
+            selectedValue={props.hours}
             style={{ height: 50, width: 100 }}
-            onValueChange={(itemValue) => setTime({ ...time, hours: Number(itemValue) })}
+            onValueChange={(itemValue) => setHours(Number(itemValue))}
           >
             {hours.map((item, index) => (
               <Picker.Item
@@ -43,9 +49,9 @@ export const TimePicker: FC<TimePickerPropType> = (props) => {
         <View style={styles.timePicker}>
           <Text style={{ color: 'black', textAlign: 'center' }}>Minutes:</Text>
           <Picker
-            selectedValue={time.minute}
+            selectedValue={props.minutes}
             style={{ height: 50, width: 100 }}
-            onValueChange={(itemValue) => setTime({ ...time, minute: Number(itemValue) })}
+            onValueChange={(itemValue) => setMinutes(Number(itemValue))}
           >
             {minutes.map((item, index) => (
               <Picker.Item

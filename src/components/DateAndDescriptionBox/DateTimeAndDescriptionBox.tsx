@@ -2,9 +2,12 @@ import { DateTimeType } from '@/store/Calendar/types'
 import React, { FC, PropsWithChildren, ReactElement, useCallback } from 'react'
 import { View, Text, StyleSheet, Button, Alert } from 'react-native'
 
+import { routeNames } from '@/routes/routeNames'
+
 type BarPropType = {
   arr: Array<DateTimeType>
   remove: (dateStr: string, hours: number, minutes: number) => void
+  navigate: (a: string, b?: any) => void
 } & PropsWithChildren<unknown>
 
 export const DateTimeAndDescriptionBox: FC<BarPropType> = (props): ReactElement => {
@@ -25,6 +28,10 @@ export const DateTimeAndDescriptionBox: FC<BarPropType> = (props): ReactElement 
       ],
       { cancelable: false },
     )
+  }, [])
+
+  const onUpdateCallback = useCallback((dateTimeObject: DateTimeType) => {
+    props.navigate(routeNames.UpdateScreen, { dateTime: dateTimeObject })
   }, [])
 
   let elements
@@ -49,7 +56,7 @@ export const DateTimeAndDescriptionBox: FC<BarPropType> = (props): ReactElement 
           <Text style={styles.descriptionText}>{item.description}</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <Button onPress={() => {}} title="Update" />
+          <Button onPress={() => onUpdateCallback({ ...item })} title="Update" />
           <Button
             color="#ad4040"
             onPress={() => onRemoveCallback(item.dateStr, item.hours, item.minutes)}

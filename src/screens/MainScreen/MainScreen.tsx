@@ -7,18 +7,13 @@ import { logger } from 'react-native-logs'
 import { DateTimeAndDescriptionBox } from '@/components/DateAndDescriptionBox'
 import { routeNames } from '@/routes/routeNames'
 import { GlobalStateType } from '@/store'
-import {
-  setSelectedDate,
-  fetchDataFromLocalStorage,
-  removeDateDescription,
-} from '@/store/Calendar/actionCreators'
-import { DateType } from '@/store/Calendar/types'
+import { setSelectedDate, removeDateDescription } from '@/store/Calendar/actionCreators'
 
 const log = logger.createLogger()
 log.setSeverity('debug')
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  const actionCreators = { setSelectedDate, fetchDataFromLocalStorage, removeDateDescription }
+  const actionCreators = { setSelectedDate, removeDateDescription }
   return bindActionCreators(actionCreators, dispatch)
 }
 
@@ -47,7 +42,7 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
 
   componentDidMount(): void {
     if (!this.props.isLoadedFirstTime) {
-      this.props.fetchDataFromLocalStorage()
+      // this.props.fetchDataFromLocalStorage()
     }
   }
 
@@ -91,6 +86,7 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
           remove={(dateStr: string, hours: number, minutes: number) => {
             this.props.removeDateDescription(dateStr, hours, minutes)
           }}
+          navigate={this.props.navigation.navigate}
         />
       </ScrollView>
     )
