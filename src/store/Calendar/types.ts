@@ -2,6 +2,7 @@ export enum calendarActionTypeConstants {
   ADD_NEW_DATE_DESCRIPTION = '@Calendar/ADD_NEW_DATE_DESCRIPTION',
   REMOVE_DATE_DESCRIPTION = '@Calendar/REMOVE_DATE',
   SET_SELECTED_DATE_STR = '@Calendar/SET_SELECTED_DATE_STR',
+  FETCH_DATES_FROM_XML_FILE_STORAGE = '@Calendar/FETCH_DATES_FROM_XML_FILE_STORAGE',
 }
 
 export type CalendarStateType = {
@@ -39,7 +40,13 @@ export interface SetSelectedDateActionType {
   payload: string
 }
 
+export interface FetchDatesFromXMLFileStorage {
+  type: typeof calendarActionTypeConstants.FETCH_DATES_FROM_XML_FILE_STORAGE
+  payload: Array<DateTimeType>
+}
+
 export type CalendarRootActionType =
   | AddDateActionType
   | RemoveDateActionType
   | SetSelectedDateActionType
+  | FetchDatesFromXMLFileStorage

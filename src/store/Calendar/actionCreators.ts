@@ -2,17 +2,24 @@ import { Dispatch } from 'redux'
 import {
   calendarActionTypeConstants as T,
   AddDateActionType,
-  DateType,
   RemoveDateActionType,
   SetSelectedDateActionType,
+  FetchDatesFromXMLFileStorage,
   DateTimeType,
 } from './types'
 import { GlobalStateType } from '@/store'
-import { saveArrayOfDatesIntoXMLFile, loadArrayOfDatesFromXMLFile } from '@/services/xmlStorage'
 import { logger } from 'react-native-logs'
+import {
+  loadObjectFromXMLFile,
+  saveObjectIntoXMLFile,
+  arrayToObject,
+  objectToArray,
+} from '@/services/xmlStorage'
 
 const log = logger.createLogger()
 log.setSeverity('debug')
+
+const XML_FILENAME = 'calendar-data'
 
 export function addNewDateDescription(
   data: DateTimeType,
@@ -24,8 +31,9 @@ export function addNewDateDescription(
     type: T.ADD_NEW_DATE_DESCRIPTION,
   }
 
-  return (dispatch: Dispatch, getState: () => GlobalStateType) => {
+  return async (dispatch: Dispatch, getState: () => GlobalStateType) => {
     dispatch(action)
+    await saveObjectIntoXMLFile(XML_FILENAME, arrayToObject(getState().calendarReducer.dates))
   }
 }
 
@@ -51,9 +59,10 @@ export function updateDateDescription(
     type: T.ADD_NEW_DATE_DESCRIPTION,
   }
 
-  return (dispatch: Dispatch, getState: () => GlobalStateType) => {
+  return async (dispatch: Dispatch, getState: () => GlobalStateType) => {
     dispatch(removeAction)
     dispatch(addAction)
+    await saveObjectIntoXMLFile(XML_FILENAME, arrayToObject(getState().calendarReducer.dates))
   }
 }
 
@@ -83,23 +92,24 @@ export function setSelectedDate(dateStr: string): SetSelectedDateActionType {
   }
 }
 
-// export function fetchDataFromLocalStorage(): (
-//   dispatch: Dispatch,
-//   getState: () => GlobalStateType,
-// ) => void {
-//   const action: FetchDataFromLocalStorage = {
-//     type: T.FETCH_DATA_FROM_LOCAL_STORAGE,
-//     payload: [],
-//   }
+export function fetchDataFromXmlFileStorage(): (
+  dispatch: Dispatch,
+  getState: () => GlobalStateType,
+) => void {
+  const action: FetchDatesFromXMLFileStorage = {
+    type: T.FETCH_DATES_FROM_XML_FILE_STORAGE,
+    payload: [],
+  }
 
-//   return async (dispatch: Dispatch) => {
-//     try {
-//       const arr = [] as Array<DateType>
-//       if (arr && arr.length) action.payload = arr
-//     } catch (error) {
-//       log['warn'](error)
-//     } finally {
-//       dispatch(action)
-//     }
-//   }
-// }
+  return async (dispatch: Dispatch) => {
+    try {
+      const arrObj = await loadObjectFromXMLFile(XML_FILENAME)
+      const arr = objectToArray(arrObj) as Array<DateTimeType>
+      if (arr && arr.length) action.payload = arr
+    } catch (error) {
+      log['warn'](error)
+    } finally {
+      dispatch(action)
+    }
+  }
+}

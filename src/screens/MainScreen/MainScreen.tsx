@@ -7,13 +7,17 @@ import { logger } from 'react-native-logs'
 import { DateTimeAndDescriptionBox } from '@/components/DateAndDescriptionBox'
 import { routeNames } from '@/routes/routeNames'
 import { GlobalStateType } from '@/store'
-import { setSelectedDate, removeDateDescription } from '@/store/Calendar/actionCreators'
+import {
+  setSelectedDate,
+  removeDateDescription,
+  fetchDataFromXmlFileStorage,
+} from '@/store/Calendar/actionCreators'
 
 const log = logger.createLogger()
 log.setSeverity('debug')
 
 function mapDispatchToProps(dispatch: Dispatch) {
-  const actionCreators = { setSelectedDate, removeDateDescription }
+  const actionCreators = { setSelectedDate, removeDateDescription, fetchDataFromXmlFileStorage }
   return bindActionCreators(actionCreators, dispatch)
 }
 
@@ -40,9 +44,9 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
     this.props.setSelectedDate(initialDateStr)
   }
 
-  async componentDidMount(): Promise<void> {
+  componentDidMount(): void {
     if (!this.props.isLoadedFirstTime) {
-      // this.props.fetchDataFromLocalStorage()
+      this.props.fetchDataFromXmlFileStorage()
     }
   }
 

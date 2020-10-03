@@ -47,6 +47,12 @@ export const calendarReducer: Reducer<CalendarStateType, CalendarRootActionType>
         ],
         descriptionForSelectedDate: '',
       }
+    case T.FETCH_DATES_FROM_XML_FILE_STORAGE:
+      return {
+        ...state,
+        dates: [...action.payload],
+        isLoadedFirstTime: true,
+      }
     default:
       return state
   }
