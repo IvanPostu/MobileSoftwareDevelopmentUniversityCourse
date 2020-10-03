@@ -9,7 +9,6 @@ import { logger } from 'react-native-logs'
 const initialState: CalendarStateType = {
   dates: [],
   selectedDateStr: '',
-  descriptionForSelectedDate: '',
   isLoadedFirstTime: false,
 }
 
@@ -29,29 +28,28 @@ export const calendarReducer: Reducer<CalendarStateType, CalendarRootActionType>
     case T.SET_SELECTED_DATE_STR:
       return {
         ...state,
-        selectedDateStr: action.payload.dateStr,
-        descriptionForSelectedDate: action.payload.description,
+        selectedDateStr: action.payload,
       }
-    case T.FETCH_DATA_FROM_LOCAL_STORAGE:
-      state.isLoadedFirstTime
-        ? log['warn']('Data has already loaded from storage!!!')
-        : log['debug']('Data loaded from storage!!!')
-      return {
-        ...state,
-        isLoadedFirstTime: true,
-        dates: [...state.dates, ...action.payload],
-      }
-    case T.UPDATE_DATE_DESCRIPTION:
-      return {
-        ...state,
-        dates: [...state.dates.filter((a) => a.dateStr != action.payload.dateStr), action.payload],
-      }
-    case T.REMOVE_DATE_DESCRIPTION:
-      return {
-        ...state,
-        dates: [...state.dates.filter((a) => a.dateStr != action.payload)],
-        descriptionForSelectedDate: '',
-      }
+    // case T.FETCH_DATA_FROM_LOCAL_STORAGE:
+    //   state.isLoadedFirstTime
+    //     ? log['warn']('Data has already loaded from storage!!!')
+    //     : log['debug']('Data loaded from storage!!!')
+    //   return {
+    //     ...state,
+    //     isLoadedFirstTime: true,
+    //     dates: [...state.dates, ...action.payload],
+    //   }
+    // case T.UPDATE_DATE_DESCRIPTION:
+    //   return {
+    //     ...state,
+    //     dates: [...state.dates.filter((a) => a.dateStr != action.payload.dateStr), action.payload],
+    //   }
+    // case T.REMOVE_DATE_DESCRIPTION:
+    //   return {
+    //     ...state,
+    //     dates: [...state.dates.filter((a) => a.dateStr != action.payload)],
+    //     descriptionForSelectedDate: '',
+    //   }
     default:
       return state
   }

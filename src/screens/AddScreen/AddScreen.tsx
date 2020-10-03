@@ -5,6 +5,7 @@ import { bindActionCreators, Dispatch } from 'redux'
 import { routeNames } from '@/routes/routeNames'
 import { GlobalStateType } from '@/store'
 import { addNewDateDescription, setSelectedDate } from '@/store/Calendar/actionCreators'
+import { TimePicker } from '@/components/TimePicker'
 
 function mapStateToProps(state: GlobalStateType) {
   return {
@@ -26,6 +27,8 @@ type AddScreenComponentPropType = PropsWithChildren<unknown> &
   }
 type AddScreenComponentStateType = {
   inputStr: string
+  hours: number
+  minutes: number
 }
 
 class AddScreenComponent extends Component<
@@ -38,17 +41,29 @@ class AddScreenComponent extends Component<
     super(props)
     this.state = {
       inputStr: '',
+      hours: 0,
+      minutes: 0,
     }
 
     this.onAddDescriptionButtonClick = this.onAddDescriptionButtonClick.bind(this)
+    this.onTimeChange = this.onTimeChange.bind(this)
+  }
+
+  onTimeChange(hours: number, minutes: number) {
+    this.setState({ hours, minutes })
   }
 
   onAddDescriptionButtonClick(): void {
     const description: string = this.state.inputStr
     const dateStr: string = this.props.selectedDateStr
     if (description) {
-      this.props.addNewDateDescription({ dateStr, description })
-      this.props.setSelectedDate(dateStr, description)
+      this.props.addNewDateDescription({
+        dateStr,
+        description,
+        hours: this.state.hours,
+        minutes: this.state.minutes,
+      })
+      this.props.setSelectedDate(dateStr)
       this.props.navigation.navigate(routeNames.MainScreen)
     } else {
       Alert.alert('Warning', 'Description can not be empty!!!')
@@ -69,6 +84,9 @@ class AddScreenComponent extends Component<
             multiline={true}
             style={styles.inputStyle}
           />
+
+          <TimePicker onTimeChange={this.onTimeChange} />
+
           <Button onPress={this.onAddDescriptionButtonClick} title={`Add description`} />
         </View>
       </ScrollView>
@@ -85,14 +103,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#333',
   },
   inputStyle: {
-    color: 'white',
+    color: 'black',
+    backgroundColor: 'grey',
     borderStyle: 'solid',
     borderWidth: 1,
     marginVertical: 6,
     borderColor: 'grey',
     marginRight: 7,
     width: '70%',
-    height: 200,
+    height: 120,
   },
 })
 

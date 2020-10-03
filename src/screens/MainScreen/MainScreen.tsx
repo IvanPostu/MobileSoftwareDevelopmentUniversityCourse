@@ -1,12 +1,10 @@
 import React, { Component, ReactElement } from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { ScrollView, StyleSheet, Button, View } from 'react-native'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import { Calendar } from 'react-native-calendars'
 import { logger } from 'react-native-logs'
-import { Bar } from './Bar'
-import { FindBar } from './FindBar'
-import { DateAndDescriptionBox } from './DateAndDescriptionBox'
+import { DateTimeAndDescriptionBox } from '@/components/DateAndDescriptionBox'
 import { routeNames } from '@/routes/routeNames'
 import { GlobalStateType } from '@/store'
 import {
@@ -15,6 +13,7 @@ import {
   removeDateDescription,
 } from '@/store/Calendar/actionCreators'
 import { findDescription } from './findDescriptionForDateStr'
+import { DateType } from '@/store/Calendar/types'
 
 const log = logger.createLogger()
 log.setSeverity('debug')
@@ -28,7 +27,6 @@ function mapStateToProps(state: GlobalStateType) {
   // log['debug']('state: ', state)
   return {
     selectedDateStr: state.calendarReducer.selectedDateStr,
-    selectedDateDescription: state.calendarReducer.descriptionForSelectedDate,
     dates: state.calendarReducer.dates,
     isLoadedFirstTime: state.calendarReducer.isLoadedFirstTime,
   }
@@ -37,7 +35,7 @@ function mapStateToProps(state: GlobalStateType) {
 type MainScreenComponentPropType = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> & {
     navigation: {
-      navigate: (a: string) => void
+      navigate: (a: string, b?: any) => void
     }
   }
 
@@ -45,13 +43,20 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
   constructor(props: MainScreenComponentPropType) {
     super(props)
     const initialDateStr: string = new Date().toISOString().slice(0, 10)
-    this.props.setSelectedDate(initialDateStr, findDescription(initialDateStr, this.props.dates))
+    this.props.setSelectedDate(initialDateStr)
+    this.onFindCallback = this.onFindCallback.bind(this)
   }
 
   componentDidMount(): void {
     if (!this.props.isLoadedFirstTime) {
       this.props.fetchDataFromLocalStorage()
     }
+  }
+
+  onFindCallback(findValue: string) {
+    log['debug'](`Find value: ${findValue}`)
+    const dates: Array<DateType> = this.props.dates.filter((d) => d.description.includes(findValue))
+    this.props.navigation.navigate(routeNames.SearchResultScreen, { dates })
   }
 
   render(): ReactElement {
@@ -73,29 +78,21 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
           style={styles.calendarStyle}
           onDayPress={(day) => {
             log['debug'](`MainScreenComponent: Selected day: ${day.dateString}`)
-            this.props.setSelectedDate(
-              day.dateString,
-              findDescription(day.dateString, this.props.dates),
-            )
+            this.props.setSelectedDate(day.dateString)
           }}
           markedDates={{
             ...dates,
             ...manualSelectedDate,
           }}
         />
-        <Bar
-          onAddClick={() => this.props.navigation.navigate(routeNames.AddScreen)}
-          onDeleteClick={() => this.props.removeDateDescription(this.props.selectedDateStr)}
-          onUpdateClick={() => this.props.navigation.navigate(routeNames.UpdateScreen)}
-          addIsActive={!Boolean(this.props.selectedDateDescription)}
-          removeIsActive={Boolean(this.props.selectedDateDescription)}
-          updateIsActive={Boolean(this.props.selectedDateDescription)}
-        />
-        <FindBar />
-        <DateAndDescriptionBox
-          dateStr={this.props.selectedDateStr}
-          description={this.props.selectedDateDescription}
-        />
+        <View style={styles.addButton}>
+          <Button
+            onPress={() => this.props.navigation.navigate(routeNames.AddScreen)}
+            title="Add"
+          />
+        </View>
+
+        <DateTimeAndDescriptionBox arr={[]} />
       </ScrollView>
     )
   }
@@ -104,6 +101,9 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
 const styles = StyleSheet.create({
   calendarStyle: {
     marginTop: 0,
+  },
+  addButton: {
+    paddingHorizontal: 20,
   },
 })
 

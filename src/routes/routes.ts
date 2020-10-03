@@ -3,6 +3,7 @@ import { ComponentClass, FunctionComponent } from 'react'
 import { MainScreen } from '@/screens/MainScreen'
 import { AddScreen } from '@/screens/AddScreen'
 import { UpdateScreen } from '@/screens/UpdateScreen'
+import { SearchResultScreen } from '@/screens/SearchResultScreen'
 
 import { routeNames as T } from './routeNames'
 
@@ -30,6 +31,11 @@ export const routes: CustomRouteType = {
     component: UpdateScreen,
     isHeaderButton: false,
     routeName: T.UpdateScreen,
+  },
+  SearchResultScreen: {
+    component: SearchResultScreen,
+    isHeaderButton: false,
+    routeName: T.SearchResultScreen,
   },
 }
 

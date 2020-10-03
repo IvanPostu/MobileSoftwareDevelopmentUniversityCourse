@@ -24,6 +24,14 @@ export async function saveArrayOfDatesIntoXMLFile(
 
 export async function loadArrayOfDatesFromXMLFile(filenameWithoutExtension: string): Promise<any> {
   const path = RNFS.ExternalDirectoryPath + `/${filenameWithoutExtension}.xml`
+
+  try {
+    const xmlExists = await RNFS.exists(path)
+    if (!xmlExists) throw Error('File not found')
+  } catch (error) {
+    throw Error('File not found')
+  }
+
   try {
     const data = await RNFS.readFile(path, 'utf8')
 

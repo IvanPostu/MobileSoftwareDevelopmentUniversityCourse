@@ -8,15 +8,19 @@ export enum calendarActionTypeConstants {
 }
 
 export type CalendarStateType = {
-  dates: Array<DateType>
+  dates: Array<DateTimeType>
   selectedDateStr: string
-  descriptionForSelectedDate: string
   isLoadedFirstTime: boolean
 }
 
 export type DateType = {
   dateStr: string // YYYY-mm-dd
   description: string
+}
+
+export type DateTimeType = DateType & {
+  hours: number
+  minutes: number
 }
 
 export interface UpdateDateActionType {
@@ -26,7 +30,7 @@ export interface UpdateDateActionType {
 
 export interface AddDateActionType {
   type: typeof calendarActionTypeConstants.ADD_NEW_DATE_DESCRIPTION
-  payload: DateType
+  payload: DateTimeType
 }
 
 export interface RemoveDateActionType {
@@ -41,7 +45,7 @@ export interface FindDateActionType {
 
 export interface SetSelectedDateActionType {
   type: typeof calendarActionTypeConstants.SET_SELECTED_DATE_STR
-  payload: DateType
+  payload: string
 }
 
 export interface FetchDataFromLocalStorage {

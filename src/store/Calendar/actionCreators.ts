@@ -8,6 +8,7 @@ import {
   UpdateDateActionType,
   SetSelectedDateActionType,
   FetchDataFromLocalStorage,
+  DateTimeType,
 } from './types'
 import { GlobalStateType } from '@/store'
 import { saveArrayOfDatesIntoXMLFile, loadArrayOfDatesFromXMLFile } from '@/services/xmlStorage'
@@ -17,7 +18,7 @@ const log = logger.createLogger()
 log.setSeverity('debug')
 
 export function addNewDateDescription(
-  data: DateType,
+  data: DateTimeType,
 ): (dispatch: Dispatch, getState: () => GlobalStateType) => void {
   const action: AddDateActionType = {
     payload: {
@@ -28,8 +29,8 @@ export function addNewDateDescription(
 
   return (dispatch: Dispatch, getState: () => GlobalStateType) => {
     dispatch(action)
-    const dateListWithDescriptions = getState().calendarReducer.dates
-    saveArrayOfDatesIntoXMLFile('datafile', dateListWithDescriptions)
+    // const dateListWithDescriptions = getState().calendarReducer.dates
+    // saveArrayOfDatesIntoXMLFile('datafile', dateListWithDescriptions)
   }
 }
 
@@ -45,8 +46,8 @@ export function updateDateDescription(
 
   return (dispatch: Dispatch, getState: () => GlobalStateType) => {
     dispatch(action)
-    const dateListWithDescriptions = getState().calendarReducer.dates
-    saveArrayOfDatesIntoXMLFile('datafile', dateListWithDescriptions)
+    // const dateListWithDescriptions = getState().calendarReducer.dates
+    // saveArrayOfDatesIntoXMLFile('datafile', dateListWithDescriptions)
   }
 }
 
@@ -60,8 +61,8 @@ export function removeDateDescription(
 
   return (dispatch: Dispatch, getState: () => GlobalStateType) => {
     dispatch(action)
-    const dateListWithDescriptions = getState().calendarReducer.dates
-    saveArrayOfDatesIntoXMLFile('datafile', dateListWithDescriptions)
+    // const dateListWithDescriptions = getState().calendarReducer.dates
+    // saveArrayOfDatesIntoXMLFile('datafile', dateListWithDescriptions)
   }
 }
 
@@ -72,12 +73,9 @@ export function findDateDescription(strDescription: string): FindDateActionType 
   }
 }
 
-export function setSelectedDate(dateStr: string, description = ''): SetSelectedDateActionType {
+export function setSelectedDate(dateStr: string): SetSelectedDateActionType {
   return {
-    payload: {
-      dateStr,
-      description,
-    },
+    payload: dateStr,
     type: T.SET_SELECTED_DATE_STR,
   }
 }
@@ -93,8 +91,8 @@ export function fetchDataFromLocalStorage(): (
 
   return async (dispatch: Dispatch) => {
     try {
-      const arr = (await loadArrayOfDatesFromXMLFile('datafile')) as Array<DateType>
-      action.payload = arr
+      const arr = [] as Array<DateType> //(await loadArrayOfDatesFromXMLFile('datafile')) as Array<DateType>
+      if (arr && arr.length) action.payload = arr
     } catch (error) {
       log['warn'](error)
     } finally {
