@@ -3,6 +3,7 @@ export enum calendarActionTypeConstants {
   REMOVE_DATE_DESCRIPTION = '@Calendar/REMOVE_DATE',
   SET_SELECTED_DATE_STR = '@Calendar/SET_SELECTED_DATE_STR',
   FETCH_DATES_FROM_XML_FILE_STORAGE = '@Calendar/FETCH_DATES_FROM_XML_FILE_STORAGE',
+  UPDATE_PUSH_NOTIFICATION_QUEUE = '@Calendar/UPDATE_PUSH_NOTIFICATION_QUEUE',
 }
 
 export type CalendarStateType = {
@@ -45,8 +46,13 @@ export interface FetchDatesFromXMLFileStorage {
   payload: Array<DateTimeType>
 }
 
+export interface UpdatePushNotificationQueueType {
+  type: typeof calendarActionTypeConstants.UPDATE_PUSH_NOTIFICATION_QUEUE
+}
+
 export type CalendarRootActionType =
   | AddDateActionType
   | RemoveDateActionType
   | SetSelectedDateActionType
   | FetchDatesFromXMLFileStorage
+  | UpdatePushNotificationQueueType

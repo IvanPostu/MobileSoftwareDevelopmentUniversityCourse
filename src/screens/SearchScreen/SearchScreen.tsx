@@ -15,7 +15,7 @@ type SearchResultScreenPropType = PropsWithChildren<unknown> & {
   }
 }
 
-export const SearchScreen: FC<SearchResultScreenPropType> = (props): ReactElement => {
+export const SearchScreen: FC<SearchResultScreenPropType> = (): ReactElement => {
   const datesList = useSelector<GlobalStateType>((state) => state.calendarReducer.dates) as Array<
     DateTimeType
   >

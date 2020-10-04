@@ -17,7 +17,7 @@ log.setSeverity('debug')
 
 export const calendarReducer: Reducer<CalendarStateType, CalendarRootActionType> = (
   state: CalendarStateType = initialState,
-  action,
+  action: CalendarRootActionType,
 ) => {
   switch (action.type) {
     case T.ADD_NEW_DATE_DESCRIPTION:
@@ -53,6 +53,7 @@ export const calendarReducer: Reducer<CalendarStateType, CalendarRootActionType>
         dates: [...action.payload],
         isLoadedFirstTime: true,
       }
+    case T.UPDATE_PUSH_NOTIFICATION_QUEUE:
     default:
       return state
   }

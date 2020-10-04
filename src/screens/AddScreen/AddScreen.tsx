@@ -57,7 +57,10 @@ class AddScreenComponent extends Component<
 
     if (
       this.props.dates.findIndex(
-        (a) => a.hours === this.state.hours && a.minutes === this.state.minutes,
+        (a) =>
+          a.hours === this.state.hours &&
+          a.minutes === this.state.minutes &&
+          a.dateStr === this.state.inputStr,
       ) !== -1
     ) {
       Alert.alert('Warning', 'Current time is reserved!!!')
