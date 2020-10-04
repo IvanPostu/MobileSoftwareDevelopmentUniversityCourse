@@ -27,7 +27,7 @@ export const Header: FC<HeaderPropsType> = ({ navigation }): ReactElement => {
           <HeaderButton
             key={key}
             routeDir={routes[key].routeName}
-            title={key}
+            title={(routes[key].headerButtonName ? routes[key].headerButtonName : key) as string}
             onClickHandler={buttonOnClickFunc}
           />
         ))}

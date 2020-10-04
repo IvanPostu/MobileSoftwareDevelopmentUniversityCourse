@@ -12,6 +12,7 @@ import {
   removeDateDescription,
   fetchDataFromXmlFileStorage,
 } from '@/store/Calendar/actionCreators'
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
 
 const log = logger.createLogger()
 log.setSeverity('debug')
@@ -32,9 +33,7 @@ function mapStateToProps(state: GlobalStateType) {
 
 type MainScreenComponentPropType = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> & {
-    navigation: {
-      navigate: (a: string, b?: any) => void
-    }
+    navigation: NavigationProp<ParamListBase>
   }
 
 class MainScreenComponent extends Component<MainScreenComponentPropType> {

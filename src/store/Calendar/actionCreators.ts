@@ -80,7 +80,7 @@ export function removeDateDescription(
     type: T.REMOVE_DATE_DESCRIPTION,
   }
 
-  return (dispatch: Dispatch, getState: () => GlobalStateType) => {
+  return (dispatch: Dispatch) => {
     dispatch(removeAction)
   }
 }

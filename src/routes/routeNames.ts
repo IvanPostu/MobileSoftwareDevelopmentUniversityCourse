@@ -2,5 +2,5 @@ export enum routeNames {
   MainScreen = 'MainScree_ndff',
   AddScreen = 'AddScreen_dfgsg',
   UpdateScreen = 'UpdateScreen_2utiowrjiow',
-  SearchResultScreen = 'SearchResultScreen_epqjfqejf',
+  SearchScreen = 'SearchScreen_epqjfqejf',
 }

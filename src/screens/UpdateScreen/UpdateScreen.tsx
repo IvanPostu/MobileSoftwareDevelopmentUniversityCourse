@@ -8,6 +8,7 @@ import { updateDateDescription, setSelectedDate } from '@/store/Calendar/actionC
 import { TimePicker } from '@/components/TimePicker'
 import { DateTimeType } from '@/store/Calendar/types'
 import { routeNames } from '@/routes/routeNames'
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
 
 function mapStateToProps(state: GlobalStateType) {
   return {
@@ -24,9 +25,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
 type UpdateScreenComponentPropType = PropsWithChildren<unknown> &
   ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> & {
-    navigation: {
-      navigate: (a: string) => void
-    }
+    navigation: NavigationProp<ParamListBase>
     route: {
       params: {
         dateTime: DateTimeType
@@ -73,15 +72,6 @@ class UpdateScreenComponent extends Component<
     const description: string = this.state.dateTime.description
     const dateStr: string = this.props.selectedDateStr
 
-    if (
-      this.props.dates.findIndex(
-        (a) => a.hours === this.state.dateTime.hours && a.minutes === this.state.dateTime.minutes,
-      ) !== -1
-    ) {
-      Alert.alert('Warning', 'Current time is reserved!!!')
-      return
-    }
-
     if (description) {
       this.props.updateDateDescription(
         this.state.oldDateTime.dateStr,
@@ -90,7 +80,11 @@ class UpdateScreenComponent extends Component<
         this.state.dateTime,
       )
       this.props.setSelectedDate(dateStr)
-      this.props.navigation.navigate(routeNames.MainScreen)
+      if (this.props.navigation.canGoBack()) {
+        this.props.navigation.goBack()
+      } else {
+        this.props.navigation.navigate(routeNames.MainScreen)
+      }
     } else {
       Alert.alert('Warning', 'Description can not be empty!!!')
       return

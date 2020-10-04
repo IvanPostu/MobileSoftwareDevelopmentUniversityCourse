@@ -6,6 +6,7 @@ import { routeNames } from '@/routes/routeNames'
 import { GlobalStateType } from '@/store'
 import { addNewDateDescription, setSelectedDate } from '@/store/Calendar/actionCreators'
 import { TimePicker } from '@/components/TimePicker'
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
 
 function mapStateToProps(state: GlobalStateType) {
   return {
@@ -22,9 +23,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
 type AddScreenComponentPropType = PropsWithChildren<unknown> &
   ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> & {
-    navigation: {
-      navigate: (a: string) => void
-    }
+    navigation: NavigationProp<ParamListBase>
   }
 type AddScreenComponentStateType = {
   inputStr: string
