@@ -74,11 +74,14 @@ class UpdateScreenComponent extends Component<
 
     if (
       this.props.dates.findIndex(
-        (a) =>
+        (a: DateTimeType) =>
           a.hours === this.state.dateTime.hours &&
           a.minutes === this.state.dateTime.minutes &&
           a.dateStr === this.state.dateTime.dateStr,
-      ) !== -1
+      ) !== -1 &&
+      this.state.dateTime.hours !== this.state.oldDateTime.hours &&
+      this.state.dateTime.minutes !== this.state.oldDateTime.minutes &&
+      this.state.dateTime.dateStr !== this.state.oldDateTime.dateStr
     ) {
       Alert.alert('Warning', 'Current time is reserved!!!')
       return
