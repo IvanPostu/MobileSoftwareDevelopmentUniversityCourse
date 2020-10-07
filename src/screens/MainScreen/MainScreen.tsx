@@ -13,6 +13,7 @@ import {
   fetchDataFromXmlFileStorage,
 } from '@/store/Calendar/actionCreators'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
+import { DateTimeType } from '@/store/Calendar/types'
 
 const log = logger.createLogger()
 log.setSeverity('debug')
@@ -50,7 +51,7 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
   }
 
   render(): ReactElement {
-    const datesForCalendar = this.props.dates.reduce((result, element) => {
+    const datesForCalendar = this.props.dates.reduce((result: any, element: any) => {
       result[element.dateStr] = { selected: true, selectedColor: '#9ee' }
       return result
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -62,7 +63,9 @@ class MainScreenComponent extends Component<MainScreenComponentPropType> {
         }
       : {}
 
-    const showedDates = this.props.dates.filter((a) => a.dateStr === this.props.selectedDateStr)
+    const showedDates = this.props.dates.filter(
+      (a: DateTimeType) => a.dateStr === this.props.selectedDateStr,
+    )
 
     return (
       <ScrollView>

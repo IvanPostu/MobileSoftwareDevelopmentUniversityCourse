@@ -71,20 +71,23 @@ class UpdateScreenComponent extends Component<
   onUpdateDescriptionButtonClick(): void {
     const description: string = this.state.dateTime.description
     const dateStr: string = this.props.selectedDateStr
+    const currItemArrIndex: number = this.props.dates.findIndex(
+      (a: DateTimeType) =>
+        a.hours === this.state.dateTime.hours &&
+        a.minutes === this.state.dateTime.minutes &&
+        a.dateStr === this.state.dateTime.dateStr,
+    )
 
-    if (
-      this.props.dates.findIndex(
-        (a: DateTimeType) =>
-          a.hours === this.state.dateTime.hours &&
-          a.minutes === this.state.dateTime.minutes &&
-          a.dateStr === this.state.dateTime.dateStr,
-      ) !== -1 &&
-      this.state.dateTime.hours !== this.state.oldDateTime.hours &&
-      this.state.dateTime.minutes !== this.state.oldDateTime.minutes &&
-      this.state.dateTime.dateStr !== this.state.oldDateTime.dateStr
-    ) {
-      Alert.alert('Warning', 'Current time is reserved!!!')
-      return
+    if (currItemArrIndex !== -1) {
+      const isSameDateTime =
+        this.props.dates[currItemArrIndex].hours === this.state.oldDateTime.hours &&
+        this.props.dates[currItemArrIndex].minutes === this.state.oldDateTime.minutes &&
+        this.props.dates[currItemArrIndex].dateStr === this.state.oldDateTime.dateStr
+
+      if (!isSameDateTime) {
+        Alert.alert('Warning', 'Current time is reserved!!!')
+        return
+      }
     }
 
     if (description) {

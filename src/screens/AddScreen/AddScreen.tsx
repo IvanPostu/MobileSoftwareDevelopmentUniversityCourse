@@ -7,6 +7,7 @@ import { GlobalStateType } from '@/store'
 import { addNewDateDescription, setSelectedDate } from '@/store/Calendar/actionCreators'
 import { TimePicker } from '@/components/TimePicker'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
+import { DateTimeType } from '@/store/Calendar/types'
 
 function mapStateToProps(state: GlobalStateType) {
   return {
@@ -57,10 +58,8 @@ class AddScreenComponent extends Component<
 
     if (
       this.props.dates.findIndex(
-        (a) =>
-          a.hours === this.state.hours &&
-          a.minutes === this.state.minutes &&
-          a.dateStr === this.state.inputStr,
+        (a: DateTimeType) =>
+          a.hours === this.state.hours && a.minutes === this.state.minutes && a.dateStr === dateStr,
       ) !== -1
     ) {
       Alert.alert('Warning', 'Current time is reserved!!!')

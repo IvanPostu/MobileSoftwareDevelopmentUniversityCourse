@@ -19,6 +19,7 @@ import {
   objectToArray,
 } from '@/services/xmlStorage'
 import PushNotification from 'react-native-push-notification'
+import { numberToTime } from './numberToTime'
 
 const log = logger.createLogger()
 log.setSeverity('debug')
@@ -143,18 +144,18 @@ export function updatePushNotificationQueue(): (
 
   PushNotification.cancelAllLocalNotifications()
 
-  const numToDateStr = (n: number) => (n < 10 ? '0' + String(n) : String(n))
-
   return (dispatch: Dispatch, getState: () => GlobalStateType) => {
     const dates: Array<DateTimeType> = getState().calendarReducer.dates
     dates.forEach((item) => {
       const date = new Date(
-        `${item.dateStr}T${numToDateStr(item.hours)}:${numToDateStr(item.minutes)}:00+03:00`,
+        `${item.dateStr}T${numberToTime(item.hours)}:${numberToTime(item.minutes)}:00+03:00`,
       )
 
       if (date.getTime() > new Date(Date.now()).getTime()) {
         PushNotification.localNotificationSchedule({
-          title: `${item.dateStr} ${item.hours}:${item.minutes} notification.`,
+          title: `${item.dateStr} ${numberToTime(item.hours)}:${numberToTime(
+            item.minutes,
+          )} notification.`,
           message: item.description,
           date: date,
         })
