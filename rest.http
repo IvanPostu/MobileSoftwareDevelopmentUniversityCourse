@@ -1,6 +1,6 @@
 
 
-
+# ++++++++++++++++++++++++++++++==
 POST http://81.180.72.17/api/Register/UserReg
 Content-Type: application/x-www-form-urlencoded
 
@@ -18,7 +18,7 @@ FullName=Jimmy
 
 
 
-
+# ++++++++++++++++++++++
 POST http://81.180.72.17/api/Login/UserAuth
 Content-Type: application/x-www-form-urlencoded
 
@@ -27,18 +27,19 @@ Email=kevin@mail.eu
 
 
 
-@token = IQbHkav8LYsGkGunBgfv6hBGGSmE
+@token = JZOkJbFaGOG7FEoNwZrAAhMdUcSB
 
 GET http://81.180.72.17/api/Profile/GetProfile
 Content-Type: application/x-www-form-urlencoded
 token: {{token}}
 
 
+# +++++++++++++++++++++++++++++++++=
 GET http://81.180.72.17/api/Doctor/GetDoctorList
 Content-Type: application/x-www-form-urlencoded
 token: {{token}}
 
-
+# ++++++++++++++++++++++++++++++++++++=
 GET http://81.180.72.17/api/Doctor/GetDoctor/1
 Content-Type: application/x-www-form-urlencoded
 token: {{token}}

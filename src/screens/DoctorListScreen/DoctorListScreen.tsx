@@ -7,26 +7,127 @@ import { routeNames } from '@/routes/routeNames'
 import { GlobalStateType } from '@/store'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import React, { Component, ReactElement } from 'react'
-import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native'
+import {
+  Alert,
+  Dimensions,
+  ImageSourcePropType,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native'
 import { connect } from 'react-redux'
 
 function mapStateToProps(state: GlobalStateType) {
   return {
     notifications: state.notificationsReducer.notifications,
-    doctors: state.doctorsReducer.doctors,
+    // doctors: state.doctorsReducer.doctors,
+    token: state.authenticationReducer.token,
   }
+}
+
+type DoctorType = {
+  doctorId: string
+  name: string
+  specialisation: string
+  grade: string //5 start
+  description: string
+  address: string
+  image: ImageSourcePropType
 }
 
 type DoctorListScreenPropType = {
   navigation: NavigationProp<ParamListBase>
 } & ReturnType<typeof mapStateToProps>
 
-class DoctorListScreenComponent extends Component<DoctorListScreenPropType> {
+type DoctorListScreenStateType = {
+  isLoad: boolean
+  doctors: Array<DoctorType>
+}
+
+class DoctorListScreenComponent extends Component<
+  DoctorListScreenPropType,
+  DoctorListScreenStateType
+> {
   constructor(props: DoctorListScreenPropType) {
     super(props)
+
+    this.state = {
+      doctors: [],
+      isLoad: true,
+    }
+
+    this.fetchDoctors = this.fetchDoctors.bind(this)
+  }
+
+  componentDidMount(): void {
+    this.fetchDoctors()
+  }
+
+  fetchDoctors(): void {
+    // console.log(this.props.token)
+    const options: RequestInit = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        token: this.props.token,
+      },
+    }
+
+    fetch('http://81.180.72.17/api/Doctor/GetDoctorList', options)
+      .then((res) => {
+        res.json().then((d) => {
+          if (res.status === 200) {
+            // console.log(d)
+            const docs = new Array<DoctorType>()
+            d.forEach((a: any) => {
+              docs.push({
+                address: a.Address,
+                description: a.About,
+                grade: String(a.Stars),
+                image: { uri: `data:image/gif;base64,${a.Photo}` },
+                name: a.FullName,
+                doctorId: a.DocId,
+                specialisation: a.Specs,
+              })
+            })
+
+            this.setState({ isLoad: false, doctors: docs })
+          } else {
+            Alert.alert('Invalid request', d.Message)
+            console.log(d, res.status)
+          }
+        })
+      })
+      .catch((err) => console.error(err))
   }
 
   render(): ReactElement {
+    const content = this.state.isLoad ? (
+      <ScrollView></ScrollView>
+    ) : (
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.cardsContainer}>
+        {this.state.doctors.map((item) => {
+          return (
+            <DoctorCard
+              onClick={() =>
+                this.props.navigation.navigate(routeNames.DoctorDetailsScreen, {
+                  doctorId: item.doctorId,
+                })
+              }
+              key={item.doctorId}
+              address={item.address}
+              doctorName={item.name}
+              doctorType={item.specialisation}
+              doctorPhoto={item.image}
+              likes={item.grade}
+            />
+          )
+        })}
+        <View style={{ marginBottom: 30 }}></View>
+      </ScrollView>
+    )
+
     return (
       <View style={styles.container}>
         <View style={styles.childContainer}>
@@ -35,26 +136,7 @@ class DoctorListScreenComponent extends Component<DoctorListScreenPropType> {
             centerElement={<Text style={{ fontSize: 22, color: 'white' }}>Doctor List</Text>}
             rightElement={<ThreePoints onClick={() => console.log(1)} />}
           />
-          <ScrollView showsVerticalScrollIndicator={false} style={styles.cardsContainer}>
-            {this.props.doctors.map((item) => {
-              return (
-                <DoctorCard
-                  onClick={() =>
-                    this.props.navigation.navigate(routeNames.DoctorDetailsScreen, {
-                      doctorId: item.doctorId,
-                    })
-                  }
-                  key={item.doctorId}
-                  address={item.address}
-                  doctorName={item.name}
-                  doctorType={item.specialisation}
-                  doctorPhoto={item.image}
-                  likes={item.grade}
-                />
-              )
-            })}
-            <View style={{ marginBottom: 30 }}></View>
-          </ScrollView>
+          {content}
         </View>
         <BottomMenu
           navigation={this.props.navigation}

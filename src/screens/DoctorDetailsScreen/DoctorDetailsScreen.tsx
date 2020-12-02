@@ -5,7 +5,7 @@ import { ThreePoints } from '@/components/Icons/ThreePoints/ThreePoints'
 import { GlobalStateType } from '@/store'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import React, { Component, ReactElement } from 'react'
-import { ScrollView, StyleSheet, Text, View, Image, ImageSourcePropType } from 'react-native'
+import { ScrollView, StyleSheet, Text, View, Image, ImageSourcePropType, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import location from '@/assets/location.png'
 import maps from '@/assets/maps.png'
@@ -15,7 +15,7 @@ import { BottomMenu } from '@/components/BotomMenu/BottomMenu'
 
 function mapStateToProps(state: GlobalStateType) {
   return {
-    doctors: state.doctorsReducer.doctors,
+    token: state.authenticationReducer.token,
   }
 }
 
@@ -28,28 +28,75 @@ type DoctorDetailsScreenComponentPropType = {
   }
 } & ReturnType<typeof mapStateToProps>
 
-export class DoctorDetailsScreenComponent extends Component<DoctorDetailsScreenComponentPropType> {
-  private _doctor: {
+type DoctorDetailsScreenComponentStateType = {
+  doctor: {
     doctorName: string
     doctorType: string
     doctorNote: string
     doctorImage: ImageSourcePropType
     doctorLocation: string
     doctorDescription: string
+    doctorId: number
   }
+}
 
+export class DoctorDetailsScreenComponent extends Component<
+  DoctorDetailsScreenComponentPropType,
+  DoctorDetailsScreenComponentStateType
+> {
   constructor(props: DoctorDetailsScreenComponentPropType) {
     super(props)
     const doctorId = props.route.params.doctorId
-    const d = props.doctors.find((a) => a.doctorId === doctorId)
-    this._doctor = {
-      doctorImage: d?.image as ImageSourcePropType,
-      doctorName: d?.name as string,
-      doctorNote: d?.grade as string,
-      doctorType: d?.specialisation as string,
-      doctorLocation: d?.address as string,
-      doctorDescription: d?.description as string,
+    this.state = {
+      doctor: {
+        doctorImage: {},
+        doctorName: '',
+        doctorNote: '',
+        doctorType: '',
+        doctorLocation: '',
+        doctorDescription: '',
+        doctorId: Number(doctorId),
+      },
     }
+
+    this.fetchDoctorInfo = this.fetchDoctorInfo.bind(this)
+  }
+
+  componentDidMount(): void {
+    this.fetchDoctorInfo()
+  }
+
+  fetchDoctorInfo(): void {
+    const options: RequestInit = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        token: this.props.token,
+      },
+    }
+
+    fetch(`http://81.180.72.17/api/Doctor/GetDoctor/${this.state.doctor.doctorId}`, options)
+      .then((res) => {
+        res.json().then((d) => {
+          if (res.status === 200) {
+            this.setState({
+              doctor: {
+                doctorLocation: d.Address,
+                doctorDescription: d.About,
+                doctorId: d.DocId,
+                doctorNote: String(d.Stars),
+                doctorImage: { uri: `data:image/gif;base64,${d.Photo}` },
+                doctorName: d.FullName,
+                doctorType: d.Specs,
+              },
+            })
+          } else {
+            Alert.alert('Invalid request', d.Message)
+            console.log(d, res.status)
+          }
+        })
+      })
+      .catch((err) => console.error(err))
   }
 
   render(): ReactElement {
@@ -62,20 +109,20 @@ export class DoctorDetailsScreenComponent extends Component<DoctorDetailsScreenC
         />
         <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
           <DoctorCardA
-            doctorImage={this._doctor.doctorImage}
+            doctorImage={this.state.doctor.doctorImage}
             rightMargin={40}
             style={{
               borderColor: 'transparent',
               borderBottomColor: 'rgb(241,241,241)',
             }}
             onClick={() => console.log(1)}
-            doctorName={this._doctor.doctorName}
-            doctorNote={this._doctor.doctorNote}
-            doctorType={this._doctor.doctorType}
+            doctorName={this.state.doctor.doctorName}
+            doctorNote={this.state.doctor.doctorNote}
+            doctorType={this.state.doctor.doctorType}
           />
           <View style={{ padding: 10 }}>
             <Text style={styles.title}>Short description</Text>
-            <Text style={styles.text}>{this._doctor.doctorDescription}</Text>
+            <Text style={styles.text}>{this.state.doctor.doctorDescription}</Text>
           </View>
           <View style={{ padding: 10 }}>
             <Text style={styles.title}>Location</Text>
@@ -89,7 +136,9 @@ export class DoctorDetailsScreenComponent extends Component<DoctorDetailsScreenC
               }}
             >
               <Image style={{ width: 20, height: 25 }} source={location} />
-              <Text style={{ marginLeft: 5, color: 'grey' }}>{this._doctor.doctorLocation}</Text>
+              <Text style={{ marginLeft: 5, color: 'grey' }}>
+                {this.state.doctor.doctorLocation}
+              </Text>
             </View>
           </View>
           <View>
