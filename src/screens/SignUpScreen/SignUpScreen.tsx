@@ -1,6 +1,6 @@
 import { rootGreenColor } from '@/constants'
 import React, { Component, ReactElement } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Image, TextInput } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, Alert } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { UserAddPhoto } from '@/components/UserAddPhoto'
@@ -8,7 +8,8 @@ import { CustomTextInput } from '@/components/CustomTextInput/CustomTextInput'
 import { ButtonOne } from '@/components/ButtonOne/ButtonOne'
 import { CustomHeader } from '@/components/CustomHeader/CustomHeader'
 import { BackArrow } from '@/components/BackArrow/BackArrow'
-import ScreenShooter from '../CameraScreen/ScreenShooter'
+import ImagePicker from 'react-native-image-picker'
+import { routeNames } from '@/routes/routeNames'
 
 const HARD_CODE = {
   FullName: 'Jimmy',
@@ -25,7 +26,6 @@ type SignUpScreenPropType = {
 }
 
 type SignUpScreenStateType = {
-  isCamera: boolean
   Base64Photo: string
   FullName: string
   Birthday: string
@@ -41,29 +41,35 @@ export default class SignUpScreen extends Component<SignUpScreenPropType, SignUp
     super(props)
 
     this.state = {
-      isCamera: false,
       Base64Photo: '',
       ...HARD_CODE,
-      // FullName: '',
-      // Birthday: '',
-      // Email: '',
-      // Address: '',
-      // Phone: '',
-      // Username: '',
-      // Password: '',
     }
 
     this.uploadPhoto = this.uploadPhoto.bind(this)
-    this.takeScreenshoot = this.takeScreenshoot.bind(this)
     this.register = this.register.bind(this)
   }
 
   uploadPhoto(): void {
-    this.setState({ isCamera: true })
-  }
+    const options = {
+      title: 'Select Avatar',
+      customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    }
 
-  takeScreenshoot(b64str: string): void {
-    this.setState({ isCamera: false, Base64Photo: b64str })
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker')
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error)
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton)
+      } else {
+        this.setState({ Base64Photo: response.data })
+      }
+    })
   }
 
   register(): void {
@@ -81,9 +87,11 @@ export default class SignUpScreen extends Component<SignUpScreenPropType, SignUp
     urlData.append('Address', Address)
     urlData.append('Username', Username)
     urlData.append('Password', Password)
-    // console.log(urlData.toString())
+
+    while (Base64Photo.length % 4 != 0) {
+      Base64Photo += '='
+    }
     urlData.append('Base64Photo', Base64Photo)
-    console.log(Base64Photo)
 
     const options: RequestInit = {
       method: 'POST',
@@ -95,14 +103,20 @@ export default class SignUpScreen extends Component<SignUpScreenPropType, SignUp
 
     fetch('http://81.180.72.17/api/Register/UserReg', options)
       .then((res) => {
-        res.json().then((d) => console.log(d, res.status))
+        res.json().then((d) => {
+          if (res.status === 201) {
+            Alert.alert('Success', 'Registration with success!!!')
+            this.props.navigation.navigate(routeNames.LoginScreen)
+          } else {
+            Alert.alert('Invalid data', d.Message)
+            console.log(d)
+          }
+        })
       })
       .catch((err) => console.error(err))
   }
 
   render(): ReactElement {
-    if (this.state.isCamera) return <ScreenShooter onScreenSnapCallback={this.takeScreenshoot} />
-
     return (
       <ScrollView style={styles.container}>
         <CustomHeader

@@ -6,20 +6,34 @@ import { LockIcon } from '@/components/LockIcon/LockIcon'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import { routeNames } from '@/routes/routeNames'
 import { AppLayout } from '@/components/Layout/AppLayout'
+import { connect } from 'react-redux'
+import { GlobalStateType } from '@/store'
+import { bindActionCreators, Dispatch } from 'redux'
+import { setAuthActionCreator } from '@/store/Authentication/actionCreators'
+
+function mapStateToProps(state: GlobalStateType) {
+  return {
+    isAuthenticated: state.authenticationReducer.isAuthenticated,
+    token: state.authenticationReducer.token,
+  }
+}
+
+function mapDispatchToProps(dispatch: Dispatch) {
+  const creators = { setAuthActionCreator }
+  return bindActionCreators(creators, dispatch)
+}
 
 type LoginScreenPropType = {
   navigation: NavigationProp<ParamListBase>
-}
+} & ReturnType<typeof mapStateToProps> &
+  ReturnType<typeof mapDispatchToProps>
 
 type LoginScreenStateType = {
   email: string
   password: string
 }
 
-const DEFAULT_EMAIL_HARDCODE = 'user'
-const DEFAULT_PASSWORD_HARDCODE = 'user'
-
-export default class LoginScreen extends Component<LoginScreenPropType, LoginScreenStateType> {
+class LoginScreenComponent extends Component<LoginScreenPropType, LoginScreenStateType> {
   constructor(props: LoginScreenPropType) {
     super(props)
     this.state = {
@@ -28,18 +42,41 @@ export default class LoginScreen extends Component<LoginScreenPropType, LoginScr
     }
 
     this.onSubmit = this.onSubmit.bind(this)
+    this.fetchAuth = this.fetchAuth.bind(this)
+  }
+
+  fetchAuth() {
+    const urlData = new URLSearchParams()
+    urlData.append('Email', this.state.email)
+    urlData.append('Password', this.state.password)
+
+    const options: RequestInit = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: urlData.toString(),
+    }
+
+    fetch('http://81.180.72.17/api/Login/UserAuth', options)
+      .then((res) => {
+        res.json().then((d) => {
+          if (res.status === 200) {
+            Alert.alert('Success', 'Login with success!!!')
+            this.props.setAuthActionCreator(true, d.Message)
+            this.props.navigation.navigate(routeNames.DoctorListScreen)
+            console.log(d.Message)
+          } else {
+            Alert.alert('Invalid request', d.Message)
+            console.log(d)
+          }
+        })
+      })
+      .catch((err) => console.error(err))
   }
 
   onSubmit(): void {
-    const { email, password } = this.state
-    if (email === DEFAULT_EMAIL_HARDCODE && password === DEFAULT_PASSWORD_HARDCODE) {
-      this.props.navigation.navigate(routeNames.DoctorListScreen)
-    } else {
-      Alert.alert(
-        'Login with error',
-        `Try to write email: '${DEFAULT_EMAIL_HARDCODE}' and password '${DEFAULT_PASSWORD_HARDCODE}'.`,
-      )
-    }
+    this.fetchAuth()
   }
 
   render(): ReactElement {
@@ -93,6 +130,10 @@ export default class LoginScreen extends Component<LoginScreenPropType, LoginScr
     )
   }
 }
+
+const LoginScreen = connect(mapStateToProps, mapDispatchToProps)(LoginScreenComponent)
+
+export default LoginScreen
 
 const TOP_MARGIN = 0.16
 
