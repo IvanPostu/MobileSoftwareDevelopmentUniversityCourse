@@ -1,8 +1,7 @@
 // import { Action } from 'redux'
 
 export enum notificationsActionTypeConstants {
-  START_LOAD = '@Notifications/START_LOAD',
-  STOP_LOAD = '@Notifications/STOP_LOAD',
+  SET_NOTIFICATIONS = '@Notifications/SET_NOTIFICATIONS',
 }
 
 export type NotificationType = {
@@ -13,13 +12,18 @@ export type NotificationType = {
     location: string //St. Broxlyn 212
     description: string
   }
-  doctor: {
-    fullname: string //Dudung Sokmati
-    specialisation: string //Eye Specialist
-    gradeInStars: string // 4.9
-  }
+  doctorId: number
 }
 
 export type NotificationsStateType = {
   notifications: Array<NotificationType>
 }
+
+export interface SetNotificationActionType {
+  type: notificationsActionTypeConstants.SET_NOTIFICATIONS
+  payload: {
+    notifications: Array<NotificationType>
+  }
+}
+
+export type NotificationsRootStateType = SetNotificationActionType

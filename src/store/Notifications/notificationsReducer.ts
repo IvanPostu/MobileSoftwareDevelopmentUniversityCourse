@@ -1,5 +1,9 @@
 import { Action, Reducer } from 'redux'
-import { NotificationsStateType } from './types'
+import {
+  NotificationsStateType,
+  notificationsActionTypeConstants as T,
+  NotificationsRootStateType,
+} from './types'
 
 const initialState: NotificationsStateType = {
   notifications: [
@@ -12,17 +16,22 @@ const initialState: NotificationsStateType = {
         location: 'St. broxlyn 212',
         name: 'Jojon Suehndra',
       },
-      doctor: {
-        fullname: 'Dudung Sokmati',
-        gradeInStars: '4.9',
-        specialisation: 'Eye Specialist',
-      },
+      doctorId: 0,
     },
   ],
 }
 
-export const notificationsReducer: Reducer<NotificationsStateType, Action<unknown>> = (
+export const notificationsReducer: Reducer<NotificationsStateType, NotificationsRootStateType> = (
   state: NotificationsStateType = initialState,
+  action: NotificationsRootStateType,
 ) => {
-  return state
+  switch (action.type) {
+    case T.SET_NOTIFICATIONS:
+      return {
+        ...state,
+        notifications: action.payload.notifications,
+      }
+    default:
+      return state
+  }
 }

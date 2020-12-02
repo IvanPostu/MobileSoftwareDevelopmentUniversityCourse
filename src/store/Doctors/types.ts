@@ -1,5 +1,9 @@
 import { ImageSourcePropType } from 'react-native'
 
+export enum doctorsActionTypeConstants {
+  SET_DOCTORS = '@Doctors/SET_DOCTORS',
+}
+
 export type DoctorType = {
   doctorId: string
   name: string
@@ -13,3 +17,12 @@ export type DoctorType = {
 export type DoctorsStateType = {
   doctors: Array<DoctorType>
 }
+
+export interface SetDoctorActionType {
+  type: typeof doctorsActionTypeConstants.SET_DOCTORS
+  payload: {
+    doctors: Array<DoctorType>
+  }
+}
+
+export type DoctorRootActionType = SetDoctorActionType

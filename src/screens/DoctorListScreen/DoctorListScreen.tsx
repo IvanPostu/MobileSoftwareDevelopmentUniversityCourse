@@ -7,42 +7,32 @@ import { routeNames } from '@/routes/routeNames'
 import { GlobalStateType } from '@/store'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
 import React, { Component, ReactElement } from 'react'
-import {
-  Alert,
-  Dimensions,
-  ImageSourcePropType,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native'
+import { Alert, Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { connect } from 'react-redux'
+import { bindActionCreators, Dispatch } from 'redux'
+import { setDoctorsActionCreator } from '@/store/Doctors/actionCreators'
+import { DoctorType } from '@/store/Doctors/types'
 
 function mapStateToProps(state: GlobalStateType) {
   return {
     notifications: state.notificationsReducer.notifications,
-    // doctors: state.doctorsReducer.doctors,
+    doctors: state.doctorsReducer.doctors,
     token: state.authenticationReducer.token,
   }
 }
 
-type DoctorType = {
-  doctorId: string
-  name: string
-  specialisation: string
-  grade: string //5 start
-  description: string
-  address: string
-  image: ImageSourcePropType
+function mapDispatchToProps(dispatch: Dispatch) {
+  const creators = { setDoctorsActionCreator }
+  return bindActionCreators(creators, dispatch)
 }
 
 type DoctorListScreenPropType = {
   navigation: NavigationProp<ParamListBase>
-} & ReturnType<typeof mapStateToProps>
+} & ReturnType<typeof mapStateToProps> &
+  ReturnType<typeof mapDispatchToProps>
 
 type DoctorListScreenStateType = {
   isLoad: boolean
-  doctors: Array<DoctorType>
 }
 
 class DoctorListScreenComponent extends Component<
@@ -53,7 +43,6 @@ class DoctorListScreenComponent extends Component<
     super(props)
 
     this.state = {
-      doctors: [],
       isLoad: true,
     }
 
@@ -92,7 +81,8 @@ class DoctorListScreenComponent extends Component<
               })
             })
 
-            this.setState({ isLoad: false, doctors: docs })
+            this.props.setDoctorsActionCreator(docs)
+            this.setState({ isLoad: false })
           } else {
             Alert.alert('Invalid request', d.Message)
             console.log(d, res.status)
@@ -107,7 +97,7 @@ class DoctorListScreenComponent extends Component<
       <ScrollView></ScrollView>
     ) : (
       <ScrollView showsVerticalScrollIndicator={false} style={styles.cardsContainer}>
-        {this.state.doctors.map((item) => {
+        {this.props.doctors.map((item) => {
           return (
             <DoctorCard
               onClick={() =>
@@ -164,4 +154,7 @@ const styles = StyleSheet.create({
   },
 })
 
-export const DoctorListScreen = connect(mapStateToProps)(DoctorListScreenComponent)
+export const DoctorListScreen = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DoctorListScreenComponent)

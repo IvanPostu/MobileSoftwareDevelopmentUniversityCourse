@@ -51,11 +51,11 @@ class NotificationScreenComponent extends Component<DoctorListScreenPropType> {
                   />
                   <DoctorInfo
                     navigation={this.props.navigation}
-                    doctorImage={this.props.doctors[0].image}
-                    doctorName={this.props.doctors[0].name}
-                    doctorNote={this.props.doctors[0].grade}
-                    doctorType={this.props.doctors[0].specialisation}
-                    doctorId={this.props.doctors[0].doctorId}
+                    doctorImage={this.props.doctors[item.doctorId].image}
+                    doctorName={this.props.doctors[item.doctorId].name}
+                    doctorNote={this.props.doctors[item.doctorId].grade}
+                    doctorType={this.props.doctors[item.doctorId].specialisation}
+                    doctorId={this.props.doctors[item.doctorId].doctorId}
                   />
                 </View>
               )
