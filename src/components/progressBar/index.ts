@@ -1,1 +1,0 @@
-export { ProgresBar } from './ProgressBar'

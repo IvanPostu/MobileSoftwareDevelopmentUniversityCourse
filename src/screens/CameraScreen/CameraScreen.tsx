@@ -1,15 +1,6 @@
 import React, { Component, PropsWithChildren, ReactElement } from 'react'
 import { StyleSheet, View } from 'react-native'
 
-import { PhotoResult } from './PhotoResult'
-import ScreenShooterComponent from './ScreenShooter'
-// import RNFetchBlob from 'rn-fetch-blob'
-
-import { logger } from 'react-native-logs'
-
-const log = logger.createLogger()
-log.setSeverity('debug')
-
 type CameraScreenPropType = PropsWithChildren<unknown>
 
 type CameraScreenStateType = {
@@ -31,7 +22,6 @@ export class CameraScreen extends Component<CameraScreenPropType, CameraScreenSt
 
   onScreenSnapCallback(base64RawImage: string): void {
     this.setState({ b64Img: base64RawImage, imageIsShowed: true })
-    log['debug']('onScreenSnapCallback isCalled')
   }
 
   render(): ReactElement {

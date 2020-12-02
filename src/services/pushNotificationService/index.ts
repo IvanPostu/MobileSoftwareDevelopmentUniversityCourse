@@ -1,1 +1,0 @@
-export { localNotification } from './localPushNotification'

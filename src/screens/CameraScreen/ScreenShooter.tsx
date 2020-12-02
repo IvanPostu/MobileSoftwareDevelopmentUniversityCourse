@@ -1,20 +1,14 @@
 import React, { Component, ReactElement, Fragment } from 'react'
 import { RNCamera } from 'react-native-camera'
 import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native'
-import CheckBox from '@react-native-community/checkbox'
-import { logger } from 'react-native-logs'
-import { savePhotoFile } from './savePhotoFileApi'
 
 type ScreenShooterPropType = {
   onScreenSnapCallback: (base64RawImage: string) => void
 }
 
 type ScreenShooterStateType = {
-  isFrontCamera: boolean
+  // isFrontCamera: boolean
 }
-
-const log = logger.createLogger()
-log.setSeverity('debug')
 
 export default class ScreenShooter extends Component<
   ScreenShooterPropType,
@@ -26,7 +20,7 @@ export default class ScreenShooter extends Component<
   constructor(props: ScreenShooterPropType) {
     super(props)
     this.state = {
-      isFrontCamera: true,
+      // isFrontCamera: true,
     }
 
     this.takePicture = this.takePicture.bind(this)
@@ -41,12 +35,10 @@ export default class ScreenShooter extends Component<
 
       try {
         const data = await this.camera.takePictureAsync(options)
-        log['info'](`take picture worked with success!!!`)
-        log['debug'](`Image Base64 string length = ${data.base64.length}`)
-        await savePhotoFile(data.base64)
+        console.log(`Image Base64 string length = ${data.base64.length}`)
+        // await savePhotoFile(data.base64)
         this.props.onScreenSnapCallback(data.base64)
       } catch (error) {
-        log['warn'](error)
         Alert.alert('Error', 'Screen capture error!!!')
       }
     }
@@ -60,36 +52,17 @@ export default class ScreenShooter extends Component<
             this.camera = ref
           }}
           style={styles.preview}
-          type={
-            this.state.isFrontCamera ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back
-          }
+          type={RNCamera.Constants.Type.front}
           flashMode={RNCamera.Constants.FlashMode.off}
         />
 
         <View style={styles.container}>
           <View style={{ flexDirection: 'row', backgroundColor: 'white', alignItems: 'center' }}>
             <Text>Front camera:</Text>
-            <CheckBox
-              value={this.state.isFrontCamera}
-              disabled={this.state.isFrontCamera}
-              onValueChange={() => {
-                this.setState({ isFrontCamera: true })
-              }}
-            />
           </View>
           <TouchableOpacity onPress={this.takePicture} style={styles.capture}>
-            <Text>Snap {this.state.isFrontCamera ? 'Front' : 'Back'}</Text>
+            <Text>Snap </Text>
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', backgroundColor: 'white', alignItems: 'center' }}>
-            <Text>Back camera:</Text>
-            <CheckBox
-              value={!this.state.isFrontCamera}
-              disabled={!this.state.isFrontCamera}
-              onValueChange={() => {
-                this.setState({ isFrontCamera: false })
-              }}
-            />
-          </View>
         </View>
       </Fragment>
     )
