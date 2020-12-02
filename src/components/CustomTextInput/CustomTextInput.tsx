@@ -5,6 +5,9 @@ type CustomTextInputPropType = {
   placeholder?: string
   style?: TextStyle
   multiline?: boolean
+  secureTextEntry?: boolean
+  onChangeText?: (test: string) => void
+  defaultValue?: string
 }
 
 export const CustomTextInput = (props: CustomTextInputPropType) => {
@@ -13,9 +16,12 @@ export const CustomTextInput = (props: CustomTextInputPropType) => {
 
   return (
     <TextInput
+      secureTextEntry={props.secureTextEntry}
+      onChangeText={props.onChangeText}
       multiline={props.multiline}
       placeholder={placeholder}
       style={{ ...styles.container, ...dStyle }}
+      defaultValue={props.defaultValue}
     />
   )
 }

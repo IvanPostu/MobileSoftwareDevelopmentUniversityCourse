@@ -29,7 +29,7 @@ export default class ScreenShooter extends Component<
   takePicture = async (): Promise<void> => {
     if (this.camera) {
       const options = {
-        quality: 0.999,
+        quality: 0.02,
         base64: true,
       }
 
