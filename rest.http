@@ -27,7 +27,7 @@ Email=kevin@mail.eu
 
 
 
-@token = 2VvD53dfQKqVIlWQ8AYPtGfe2Ogc
+@token = fpCzhTrM4Zk8EWK1z1OHkrhsDPIi
 
 GET http://81.180.72.17/api/Profile/GetProfile
 Content-Type: application/x-www-form-urlencoded
@@ -40,12 +40,12 @@ Content-Type: application/x-www-form-urlencoded
 token: {{token}}
 
 # ++++++++++++++++++++++++++++++++++++=
-GET http://81.180.72.17/api/Doctor/GetDoctor/1
+GET http://81.180.72.17/api/Doctor/GetDoctor/5
 Content-Type: application/x-www-form-urlencoded
 token: {{token}}
 
 
-
+# +++++++++++++++++++++++++++++++++++=
 POST http://81.180.72.17/api/Doctor/AddConsultation
 Content-Type: application/x-www-form-urlencoded
 token: {{token}}

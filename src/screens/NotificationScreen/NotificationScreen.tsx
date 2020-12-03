@@ -30,6 +30,12 @@ class NotificationScreenComponent extends Component<DoctorListScreenPropType> {
   }
 
   render(): ReactElement {
+    const doctorIndex = this.props.doctors.findIndex(
+      (a) => +a.doctorId === +this.props.notifications[0].doctorId,
+    )
+
+    const showDoctor = doctorIndex > -1
+
     return (
       <View style={styles.container}>
         <View style={styles.childContainer}>
@@ -49,14 +55,16 @@ class NotificationScreenComponent extends Component<DoctorListScreenPropType> {
                     location={item.requestDetails.location}
                     name={item.requestDetails.name}
                   />
-                  <DoctorInfo
-                    navigation={this.props.navigation}
-                    doctorImage={this.props.doctors[item.doctorId].image}
-                    doctorName={this.props.doctors[item.doctorId].name}
-                    doctorNote={this.props.doctors[item.doctorId].grade}
-                    doctorType={this.props.doctors[item.doctorId].specialisation}
-                    doctorId={this.props.doctors[item.doctorId].doctorId}
-                  />
+                  {showDoctor && (
+                    <DoctorInfo
+                      navigation={this.props.navigation}
+                      doctorImage={this.props.doctors[doctorIndex].image}
+                      doctorName={this.props.doctors[doctorIndex].name}
+                      doctorNote={this.props.doctors[doctorIndex].grade}
+                      doctorType={this.props.doctors[doctorIndex].specialisation}
+                      doctorId={this.props.doctors[doctorIndex].doctorId}
+                    />
+                  )}
                 </View>
               )
             })}

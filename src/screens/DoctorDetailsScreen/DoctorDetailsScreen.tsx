@@ -97,9 +97,10 @@ export class DoctorDetailsScreenComponent extends Component<
             if (res.status === 401) {
               Alert.alert('Sessia de autentificare a expirat')
               this.props.navigation.navigate(routeNames.LoginScreen)
+            } else {
+              Alert.alert('Invalid request', d.Message)
+              console.log(d, res.status)
             }
-            Alert.alert('Invalid request', d.Message)
-            console.log(d, res.status)
           }
         })
       })
