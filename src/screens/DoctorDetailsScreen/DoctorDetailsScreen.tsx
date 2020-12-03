@@ -12,6 +12,7 @@ import maps from '@/assets/maps.png'
 import { ButtonOne } from '@/components/ButtonOne/ButtonOne'
 import { rootGreenColor } from '@/constants'
 import { BottomMenu } from '@/components/BotomMenu/BottomMenu'
+import { routeNames } from '@/routes/routeNames'
 
 function mapStateToProps(state: GlobalStateType) {
   return {
@@ -90,7 +91,13 @@ export class DoctorDetailsScreenComponent extends Component<
                 doctorType: d.Specs,
               },
             })
+
+            console.log(d.DocId)
           } else {
+            if (res.status === 401) {
+              Alert.alert('Sessia de autentificare a expirat')
+              this.props.navigation.navigate(routeNames.LoginScreen)
+            }
             Alert.alert('Invalid request', d.Message)
             console.log(d, res.status)
           }

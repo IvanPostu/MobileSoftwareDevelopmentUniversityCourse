@@ -78,8 +78,6 @@ export default class SignUpScreen extends Component<SignUpScreenPropType, SignUp
 
     let { Base64Photo } = this.state
 
-    Base64Photo = Base64Photo.substr(0, Base64Photo.length - 1)
-
     urlData.append('FullName', FullName)
     urlData.append('Birthday', Birthday)
     urlData.append('Email', Email)

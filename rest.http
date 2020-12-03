@@ -27,7 +27,7 @@ Email=kevin@mail.eu
 
 
 
-@token = yIIccM1kSLXzLFg75qnGDTcjIabR
+@token = 2VvD53dfQKqVIlWQ8AYPtGfe2Ogc
 
 GET http://81.180.72.17/api/Profile/GetProfile
 Content-Type: application/x-www-form-urlencoded
