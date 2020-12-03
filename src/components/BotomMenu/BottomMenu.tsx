@@ -54,7 +54,7 @@ export const BottomMenu: FC<BottomMenuPropType> = (props: BottomMenuPropType): R
         width={24}
       />
       <BottomMenuItem
-        onClick={(e: GestureResponderEvent) => console.log(e)}
+        onClick={() => props.navigation.navigate(routeNames.ProfileScreen)}
         iconColor={props.selected === 'Profile' ? 'green' : 'grey'}
         type="Profile"
         height={23}
