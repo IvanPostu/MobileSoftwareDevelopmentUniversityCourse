@@ -1,4 +1,5 @@
 # P.A.M. - programarea aplicațiilor mobile
 
 
-### [Laborator 1](./docs/Lab1.MD)
+Laboratoarele 1, 2, 3, 4, 5, 6 sunt repartizate pe branch - uri.
+
